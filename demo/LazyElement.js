@@ -7,14 +7,18 @@ export default class LazyElement extends Component {
 		children: PropTypes.node,
 	};
 
-	handleReached = () => {
-		console.log('on reached');
+	handleEnter = () => {
+		console.log('on enter');
+	};
+
+	handleLeave = () => {
+		console.log('on leave');
 	};
 
 	render() {
 		const { children } = this.props;
 		return (
-			<ScrollObserver onReached={this.handleReached}>
+			<ScrollObserver onEnter={this.handleEnter} onLeave={this.handleLeave}>
 				{({ ref }) => <div ref={ref}>{children}</div>}
 			</ScrollObserver>
 		);

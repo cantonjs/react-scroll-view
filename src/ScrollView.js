@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { isIOS, debounce } from './util';
 import Observer from './Observer';
+import Intersection from './Intersection';
 import Context from './Context';
 
 // TODO: should add [stickyheaderindices](https://facebook.github.io/react-native/docs/scrollview.html#stickyheaderindices) support
@@ -88,12 +89,13 @@ export default class ScrollView extends Component {
 	observeEndReached() {
 		const { end, props: { onEndReached } } = this;
 		if (onEndReached) {
-			this.observer.observe(end, onEndReached);
+			const intersection = new Intersection({ onEnter: onEndReached });
+			this.observer.observe(end, intersection);
 		}
 	}
 
 	unobserveEndReached() {
-		this.observer.observe(this.end);
+		this.observer.unobserve(this.end);
 	}
 
 	handleScroll = (ev) => {
@@ -105,11 +107,6 @@ export default class ScrollView extends Component {
 		onScroll && onScroll(ev);
 		this.toEmitOnScrollEnd(ev);
 	};
-
-	emitEnd() {
-		const { onEndReached } = this.props;
-		onEndReached && onEndReached();
-	}
 
 	render() {
 		const {

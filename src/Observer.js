@@ -20,10 +20,14 @@ export default class Observer {
 	create() {
 		const { root, rootMargin } = this;
 		const callback = (entries) =>
-			entries.forEach(({ isIntersecting, target }) => {
-				if (isIntersecting && this.map.has(target)) {
-					const fn = this.map.get(target);
-					fn();
+			entries.forEach((entry) => {
+				const { target, isIntersecting } = entry;
+				if (this.map.has(target)) {
+					const intersection = this.map.get(target);
+					const { isMounted } = intersection;
+					if (!isMounted) intersection.mount();
+					if (isIntersecting) intersection.onEnter();
+					else if (isMounted) intersection.onLeave();
 				}
 			});
 		this.observer = new IntersectionObserver(callback, {
@@ -39,10 +43,12 @@ export default class Observer {
 		}
 	}
 
-	observe(target, callback) {
-		this.map.set(target, callback);
-		if (!this.observer) this.create();
-		this.observer.observe(target);
+	observe(target, intersection) {
+		if (intersection.isValid && !this.map.has(target)) {
+			this.map.set(target, intersection);
+			if (!this.observer) this.create();
+			this.observer.observe(target);
+		}
 	}
 
 	unobserve(target) {

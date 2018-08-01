@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Context from './Context';
+import Intersection from './Intersection';
 
 export default class ScrollObserver extends Component {
 	static propTypes = {
 		children: PropTypes.func.isRequired,
-		onReached: PropTypes.func,
+		onEnter: PropTypes.func,
+		onLeave: PropTypes.func,
 	};
 
 	componentWillUnmount() {
@@ -14,9 +16,10 @@ export default class ScrollObserver extends Component {
 	}
 
 	ref = (dom) => {
-		const { onReached } = this.props;
+		const { onEnter, onLeave } = this.props;
 		this.dom = dom;
-		if (onReached) this.observer.observe(dom, onReached);
+		const intersection = new Intersection({ onEnter, onLeave });
+		this.observer.observe(dom, intersection);
 	};
 
 	renderChildren = (observer) => {
