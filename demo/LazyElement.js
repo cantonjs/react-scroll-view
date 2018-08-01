@@ -19,7 +19,17 @@ export default class LazyElement extends Component {
 		const { children } = this.props;
 		return (
 			<ScrollObserver onEnter={this.handleEnter} onLeave={this.handleLeave}>
-				{({ ref }) => <div ref={ref}>{children}</div>}
+				{({ ref, isIntersecting }) => (
+					<div
+						ref={ref}
+						style={{
+							opacity: isIntersecting ? 1 : 0,
+							transition: 'opacity 2s',
+						}}
+					>
+						{children}
+					</div>
+				)}
 			</ScrollObserver>
 		);
 	}

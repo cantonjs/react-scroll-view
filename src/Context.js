@@ -1,3 +1,6 @@
 import createReactContext from 'create-react-context';
 
-export default createReactContext();
+export default createReactContext({
+	ref: () => {},
+	isIntersecting: true,
+});
