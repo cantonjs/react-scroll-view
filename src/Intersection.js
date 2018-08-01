@@ -11,11 +11,11 @@ export default class Intersection {
 		this.isMounted = true;
 	}
 
-	onEnter() {
-		if (this._onEnter) return this._onEnter();
+	onEnter(...args) {
+		if (this._onEnter) return this._onEnter(...args);
 	}
 
-	onLeave() {
-		if (this._onLeave) return this._onLeave();
+	onLeave(...args) {
+		if (this._onLeave) return this._onLeave(...args);
 	}
 }

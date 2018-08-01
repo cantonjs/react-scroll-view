@@ -10,6 +10,8 @@ export default class Observer {
 	constructor() {
 		this.observer = null;
 		this.map = new Map();
+		this.prevScrollTop = 0;
+		this.direction = 'down';
 	}
 
 	mount(root, rootMargin) {
@@ -22,12 +24,13 @@ export default class Observer {
 		const callback = (entries) =>
 			entries.forEach((entry) => {
 				const { target, isIntersecting } = entry;
-				if (this.map.has(target)) {
-					const intersection = this.map.get(target);
+				const { direction, map } = this;
+				if (map.has(target)) {
+					const intersection = map.get(target);
 					const { isMounted } = intersection;
 					if (!isMounted) intersection.mount();
-					if (isIntersecting) intersection.onEnter();
-					else if (isMounted) intersection.onLeave();
+					if (isIntersecting) intersection.onEnter(direction);
+					else if (isMounted) intersection.onLeave(direction);
 				}
 			});
 		this.observer = new IntersectionObserver(callback, {
@@ -55,5 +58,12 @@ export default class Observer {
 		this.map.delete(target);
 		this.observer.unobserve(target);
 		if (!this.map.size) this.removeObserver();
+	}
+
+	updateDirection(ev) {
+		const { scrollTop } = ev.currentTarget;
+		const { prevScrollTop } = this;
+		this.direction = scrollTop < prevScrollTop ? 'up' : 'down';
+		this.prevScrollTop = scrollTop;
 	}
 }

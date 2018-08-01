@@ -26,16 +26,17 @@ export default class ScrollObserver extends Component {
 		const { dom } = this;
 		if (dom) this.observer.unobserve(dom);
 	}
-	onEnter = () => {
+
+	onEnter = (...args) => {
 		const { state: { isIntersecting }, props: { onEnter } } = this;
 		!isIntersecting && this.setState({ isIntersecting: true });
-		onEnter && onEnter();
+		onEnter && onEnter(...args);
 	};
 
-	onLeave = () => {
+	onLeave = (...args) => {
 		const { state: { isIntersecting }, props: { onLeave } } = this;
 		isIntersecting && this.setState({ isIntersecting: false });
-		onLeave && onLeave();
+		onLeave && onLeave(...args);
 	};
 
 	renderChildren = (observer) => {
