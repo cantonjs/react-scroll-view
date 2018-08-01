@@ -1,0 +1,20 @@
+{
+	"presets": [
+		"react",
+		"stage-0",
+	],
+	"env": {
+		"cjs": {
+			"presets": [
+				"es2015",
+				"stage-0",
+			]
+		},
+		"es": {
+			"presets": [
+				["es2015", { "modules": false }],
+				"stage-0",
+			],
+		},
+	}
+}
