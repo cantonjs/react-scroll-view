@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { isIOS, debounce } from './util';
 import Observer from './Observer';
+import Context from './Context';
 
 // TODO: should add [stickyheaderindices](https://facebook.github.io/react-native/docs/scrollview.html#stickyheaderindices) support
 
@@ -47,6 +48,7 @@ export default class ScrollView extends Component {
 	constructor(props) {
 		super(props);
 
+		this.observer = new Observer();
 		this.toEmitOnScrollEnd = debounce((ev) => {
 			const { onScrollEnd } = this.props;
 			this.isScrolling = false;
@@ -57,7 +59,7 @@ export default class ScrollView extends Component {
 	componentDidMount() {
 		const { dom, props: { endReachedThreshold } } = this;
 		const rootMargin = `${endReachedThreshold}px`;
-		this.observer = new Observer(dom, rootMargin);
+		this.observer.mount(dom, rootMargin);
 		this.observeEndReached();
 	}
 
@@ -121,18 +123,21 @@ export default class ScrollView extends Component {
 				throttle,
 				...other
 			},
+			observer,
 		} = this;
 		return (
-			<div
-				{...other}
-				style={{ ...styles.main, ...style }}
-				ref={this.scrollViewRef}
-				onScroll={this.handleScroll}
-			>
-				{children}
-				{isIOS && <span style={styles.background} />}
-				<span ref={this.endRef} />
-			</div>
+			<Context.Provider value={observer}>
+				<div
+					{...other}
+					style={{ ...styles.main, ...style }}
+					ref={this.scrollViewRef}
+					onScroll={this.handleScroll}
+				>
+					{children}
+					{isIOS && <span style={styles.background} />}
+					<span ref={this.endRef} />
+				</div>
+			</Context.Provider>
 		);
 	}
 }

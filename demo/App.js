@@ -1,5 +1,6 @@
 import 'intersection-observer';
 import React, { Component } from 'react';
+import LazyElement from './LazyElement';
 import { ScrollView } from '../src';
 
 const styles = {
@@ -198,6 +199,9 @@ export default class App extends Component {
 					nibh enim a quam. Nulla eu ipsum augue. Vivamus eu lorem a mi dictum
 					viverra.
 				</p>
+				<LazyElement>
+					<h2>Lazy</h2>
+				</LazyElement>
 				<p>
 					In bibendum cursus erat, molestie varius nibh varius sed. Donec orci
 					libero, consequat sed viverra non, blandit vitae nibh. Morbi quis

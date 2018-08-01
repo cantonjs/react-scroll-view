@@ -7,11 +7,14 @@ if (!IntersectionObserver) {
 }
 
 export default class Observer {
-	constructor(root, rootMargin) {
-		this.root = root;
-		this.rootMargin = rootMargin;
+	constructor() {
 		this.observer = null;
 		this.map = new Map();
+	}
+
+	mount(root, rootMargin) {
+		this.root = root;
+		this.rootMargin = rootMargin;
 	}
 
 	create() {
