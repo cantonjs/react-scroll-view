@@ -1,6 +1,7 @@
 const { resolve } = require('path');
 const webpack = require('webpack');
 const { name } = require('./package.json');
+const getMyIp = require('get-my-ip');
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
@@ -42,9 +43,6 @@ module.exports = (webpackEnv = {}) => {
 			modules: [srcDir, 'node_modules'],
 			extensions: ['.js'],
 		},
-		resolveLoader: {
-			moduleExtensions: ['-loader'],
-		},
 		mode: process.env.NODE_ENV,
 		optimization: {
 			minimize: !!minify,
@@ -52,6 +50,7 @@ module.exports = (webpackEnv = {}) => {
 		devServer: {
 			contentBase: demoDir,
 			port: 3000,
+			host: getMyIp(),
 		},
 	};
 
@@ -61,18 +60,11 @@ module.exports = (webpackEnv = {}) => {
 			filename: 'bundle.js',
 			path: resolve(__dirname, 'demo'),
 		};
-		config.module.rules.push(
-			{
-				test: /\.scss$/,
-				include: demoDir,
-				use: ['style', 'css', 'postcss', 'sass'],
-			},
-			{
-				test: /\.es$/,
-				include: demoDir,
-				use: ['raw'],
-			},
-		);
+		config.module.rules.push({
+			test: /\.css$/,
+			include: demoDir,
+			use: ['style-loader', 'css-loader'],
+		});
 	}
 	else {
 		config.entry = './src';

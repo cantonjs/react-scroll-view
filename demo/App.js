@@ -6,10 +6,15 @@ import { ScrollView } from '../src';
 
 const styles = {
 	main: {
+		position: 'absolute',
+		width: '100%',
 		height: '100vh',
 		padding: 40,
 		margin: 0,
-		boxSizing: 'border-box',
+		left: 0,
+		right: 0,
+		top: 0,
+		bottom: 0,
 	},
 };
 
@@ -22,8 +27,12 @@ export default class App extends Component {
 		console.log('scroll end');
 	};
 
-	onEndReached = () => {
+	handleEndReached = () => {
 		console.log('end reached');
+	};
+
+	handleRefresh = () => {
+		console.log('refresh');
 	};
 
 	render() {
@@ -32,7 +41,8 @@ export default class App extends Component {
 				style={styles.main}
 				onScrollStart={this.handleScrollStart}
 				onScrollEnd={this.handleScrollEnd}
-				onEndReached={this.onEndReached}
+				onEndReached={this.handleEndReached}
+				onRefresh={this.handleRefresh}
 			>
 				<h1>React Scroll View</h1>
 				<section>
