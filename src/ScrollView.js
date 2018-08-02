@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { isIOS, debounce } from './util';
 import Observer from './Observer';
 import Intersection from './Intersection';
-import Context from './Context';
+import { ObserverContext } from './Contexts';
 
 // TODO: should add [stickyheaderindices](https://facebook.github.io/react-native/docs/scrollview.html#stickyheaderindices) support
 
@@ -124,7 +124,7 @@ export default class ScrollView extends Component {
 			observer,
 		} = this;
 		return (
-			<Context.Provider value={observer}>
+			<ObserverContext.Provider value={observer}>
 				<div
 					{...other}
 					style={{ ...styles.main, ...style }}
@@ -135,7 +135,7 @@ export default class ScrollView extends Component {
 					{isIOS && <span style={styles.background} />}
 					<span ref={this.endRef} />
 				</div>
-			</Context.Provider>
+			</ObserverContext.Provider>
 		);
 	}
 }

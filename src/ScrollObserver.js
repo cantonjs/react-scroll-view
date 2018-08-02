@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Context from './Context';
+import { ObserverContext } from './Contexts';
 import Intersection from './Intersection';
 
 export default class ScrollObserver extends Component {
@@ -46,6 +46,8 @@ export default class ScrollObserver extends Component {
 	};
 
 	render() {
-		return <Context.Consumer>{this.renderChildren}</Context.Consumer>;
+		return (
+			<ObserverContext.Consumer>{this.renderChildren}</ObserverContext.Consumer>
+		);
 	}
 }

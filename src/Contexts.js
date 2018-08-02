@@ -1,6 +1,6 @@
 import createReactContext from 'create-react-context';
 
-export default createReactContext({
+export const ObserverContext = createReactContext({
 	ref: () => {},
 	isIntersecting: true,
 });
