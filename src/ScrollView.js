@@ -37,11 +37,13 @@ export default class ScrollView extends Component {
 		endReachedThreshold: PropTypes.number,
 		innerRef: PropTypes.func,
 		throttle: PropTypes.number,
+		disabled: PropTypes.bool,
 	};
 
 	static defaultProps = {
 		throttle: 0,
 		endReachedThreshold: 0,
+		disabled: false,
 	};
 
 	isScrolling = false;
@@ -119,15 +121,18 @@ export default class ScrollView extends Component {
 				onEndReached,
 				endReachedThreshold,
 				throttle,
+				disabled,
 				...other
 			},
 			observer,
 		} = this;
+		const styled = { ...styles.main, ...style };
+		if (disabled) styled.overflow = 'hidden';
 		return (
 			<ObserverContext.Provider value={observer}>
 				<div
 					{...other}
-					style={{ ...styles.main, ...style }}
+					style={styled}
 					ref={this.scrollViewRef}
 					onScroll={this.handleScroll}
 				>
