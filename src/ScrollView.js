@@ -48,7 +48,7 @@ export default class ScrollView extends Component {
 		onRefresh: PropTypes.func,
 		isRefreshing: PropTypes.bool,
 		refreshControlColor: PropTypes.string,
-		refreshControlBackgroundColor: PropTypes.string,
+		refreshControlStyle: PropTypes.object,
 	};
 
 	static defaultProps = {
@@ -200,7 +200,7 @@ export default class ScrollView extends Component {
 				isRefreshing,
 				refreshControl,
 				refreshControlColor,
-				refreshControlBackgroundColor,
+				refreshControlStyle,
 				...other
 			},
 			observer,
@@ -223,7 +223,7 @@ export default class ScrollView extends Component {
 							ref={this.refreshControlRef}
 							isRefreshing={isRefreshing}
 							color={refreshControlColor}
-							backgroundColor={refreshControlBackgroundColor}
+							style={refreshControlStyle}
 						/>
 					)}
 					{children}

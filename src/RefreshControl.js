@@ -26,7 +26,7 @@ export default class RefreshControl extends Component {
 	static propTypes = {
 		isRefreshing: PropTypes.bool.isRequired,
 		color: PropTypes.string.isRequired,
-		backgroundColor: PropTypes.string,
+		style: PropTypes.object,
 	};
 
 	shouldRefresh = false;
@@ -65,7 +65,7 @@ export default class RefreshControl extends Component {
 
 	render() {
 		const {
-			props: { color, backgroundColor, isRefreshing, ...other },
+			props: { color, style, isRefreshing, ...other },
 			shouldRefresh,
 		} = this;
 
@@ -73,8 +73,8 @@ export default class RefreshControl extends Component {
 			<div
 				{...other}
 				style={{
+					...style,
 					...styles.container,
-					backgroundColor,
 					minHeight: isRefreshing ? PullThreshold : 0,
 				}}
 				ref={this.domRef}
