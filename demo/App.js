@@ -19,6 +19,10 @@ const styles = {
 };
 
 export default class App extends Component {
+	state = {
+		isRefreshing: false,
+	};
+
 	handleScrollStart = () => {
 		console.log('scroll start');
 	};
@@ -33,9 +37,14 @@ export default class App extends Component {
 
 	handleRefresh = () => {
 		console.log('refresh');
+		this.setState(() => ({ isRefreshing: true }));
+		setTimeout(() => {
+			this.setState(() => ({ isRefreshing: false }));
+		}, 2000);
 	};
 
 	render() {
+		const { isRefreshing } = this.state;
 		return (
 			<ScrollView
 				style={styles.main}
@@ -43,6 +52,8 @@ export default class App extends Component {
 				onScrollEnd={this.handleScrollEnd}
 				onEndReached={this.handleEndReached}
 				onRefresh={this.handleRefresh}
+				isRefreshing={isRefreshing}
+				refreshControl
 			>
 				<h1>React Scroll View</h1>
 				<section>

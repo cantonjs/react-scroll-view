@@ -3,30 +3,15 @@ import PropTypes from 'prop-types';
 import { isIOS, debounce } from './util';
 import Observer from './Observer';
 import Intersection from './Intersection';
-import Arrow from './Arrow';
+import RefreshControl from './RefreshControl';
 import { ObserverContext } from './Contexts';
 
 // TODO: should add [stickyheaderindices](https://facebook.github.io/react-native/docs/scrollview.html#stickyheaderindices) support
-
-const PullThreshold = 80;
 
 const styles = {
 	main: {
 		overflowY: isIOS ? 'scroll' : 'auto',
 		position: 'relative',
-	},
-	refresh: {
-		height: 0,
-		overflow: 'hidden',
-		position: 'relative',
-	},
-	refreshIcon: {
-		width: 32,
-		height: 32,
-		position: 'absolute',
-		left: '50%',
-		bottom: PullThreshold / 2 - 16,
-		marginLeft: -16,
 	},
 	background: {
 		width: '100%',
@@ -37,6 +22,8 @@ const styles = {
 		zIndex: -1,
 	},
 };
+
+const overflowStyle = styles.main.overflowY;
 
 if (isIOS) {
 	styles.main.WebkitOverflowScrolling = 'touch';
@@ -54,19 +41,24 @@ export default class ScrollView extends Component {
 		onTouchMove: PropTypes.func,
 		onTouchEnd: PropTypes.func,
 		endReachedThreshold: PropTypes.number,
-		onRefresh: PropTypes.func,
 		innerRef: PropTypes.func,
 		throttle: PropTypes.number,
 		disabled: PropTypes.bool,
+		refreshControl: PropTypes.bool,
+		onRefresh: PropTypes.func,
+		isRefreshing: PropTypes.bool,
+		refreshControlColor: PropTypes.string,
+		refreshControlBackgroundColor: PropTypes.string,
 	};
 
 	static defaultProps = {
 		throttle: 0,
 		endReachedThreshold: 0,
 		disabled: false,
+		isRefreshing: false,
+		refreshControl: false,
+		refreshControlColor: '#333',
 	};
-
-	isScrolling = false;
 
 	constructor(props) {
 		super(props);
@@ -87,10 +79,15 @@ export default class ScrollView extends Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		const { onEndReached } = this.props;
+		const { onEndReached, isRefreshing } = this.props;
 		if (onEndReached !== prevProps.onEndReached) {
 			if (onEndReached) this.observeEndReached();
 			else this.unobserveEndReached();
+		}
+		if (prevProps.isRefreshing && !isRefreshing) {
+			const { refreshControl } = this;
+			refreshControl.end();
+			refreshControl.setHeight(0);
 		}
 	}
 
@@ -108,12 +105,8 @@ export default class ScrollView extends Component {
 		this.end = dom;
 	};
 
-	refreshRef = (dom) => {
-		this.refresh = dom;
-	};
-
-	refreshIconRef = (refreshIcon) => {
-		this.refreshIcon = refreshIcon;
+	refreshControlRef = (refreshControl) => {
+		this.refreshControl = refreshControl;
 	};
 
 	observeEndReached() {
@@ -140,48 +133,55 @@ export default class ScrollView extends Component {
 	};
 
 	handleTouchStart = (ev) => {
-		const { onTouchStart } = this.props;
+		const { onTouchStart, refreshControl } = this.props;
 		onTouchStart && onTouchStart(ev);
+		if (!refreshControl) return;
 		if (this.dom.scrollTop <= 0) {
 			this.y0 = ev.touches[0].clientY;
 		}
 	};
 
 	handleTouchMove = (ev) => {
-		const { onTouchMove } = this.props;
+		const { onTouchMove, refreshControl } = this.props;
 		onTouchMove && onTouchMove(ev);
+		if (!refreshControl) return;
 		if (this.y0) {
 			const dy = ev.touches[0].clientY - this.y0;
 			if (dy > 0 && !this.isPullingDown) {
-				this.refresh.style.transition = 'none';
-				this.dom.style.overflow = 'hidden';
+				this.refreshControl.start();
+				this.dom.style.overflowY = 'hidden';
 				this.isPullingDown = true;
 			}
 			else if (dy <= 0 && this.isPullingDown) {
-				this.refresh.style.height = 0;
-				this.dom.style.overflow = 'scroll';
+				this.refreshControl.setHeight(0);
+				this.dom.style.overflowY = overflowStyle;
 				this.isPullingDown = false;
 			}
 			if (this.isPullingDown) {
-				this.refresh.style.height = `${dy > 0 ? dy : 0}px`;
-				this.refreshIcon.setDelta(dy);
+				this.refreshControl.setHeight(dy);
 			}
 		}
 	};
 
 	handleTouchEnd = (ev) => {
-		const { onTouchEnd, onRefresh } = this.props;
+		const { onTouchEnd, onRefresh, refreshControl, isRefreshing } = this.props;
 		onTouchEnd && onTouchEnd(ev);
-		if (this.isPullingDown) {
-			this.y0 = null;
-			this.refresh.style.height = 0;
-			this.refresh.style.transition = 'height 0.3s ease-out';
-			this.dom.style.overflow = 'scroll';
-			this.isPullingDown = false;
-			if (this.refreshIcon.shouldRefresh) {
+		if (!refreshControl) return;
+		this.y0 = null;
+		if (isRefreshing || this.isPullingDown) {
+			const { refreshControl } = this;
+			if (!isRefreshing && refreshControl.shouldRefresh) {
 				onRefresh && onRefresh();
-				this.refreshIcon.reset();
 			}
+			refreshControl.end();
+			if (isRefreshing || refreshControl.shouldRefresh) {
+				refreshControl.show();
+			}
+			else {
+				refreshControl.setHeight(0);
+			}
+			this.dom.style.overflowY = overflowStyle;
+			this.isPullingDown = false;
 		}
 	};
 
@@ -197,6 +197,10 @@ export default class ScrollView extends Component {
 				onRefresh,
 				throttle,
 				disabled,
+				isRefreshing,
+				refreshControl,
+				refreshControlColor,
+				refreshControlBackgroundColor,
 				...other
 			},
 			observer,
@@ -214,13 +218,14 @@ export default class ScrollView extends Component {
 					onTouchMove={this.handleTouchMove}
 					onTouchEnd={this.handleTouchEnd}
 				>
-					<div style={styles.refresh} ref={this.refreshRef}>
-						<Arrow
-							style={styles.refreshIcon}
-							threshold={PullThreshold}
-							ref={this.refreshIconRef}
+					{refreshControl && (
+						<RefreshControl
+							ref={this.refreshControlRef}
+							isRefreshing={isRefreshing}
+							color={refreshControlColor}
+							backgroundColor={refreshControlBackgroundColor}
 						/>
-					</div>
+					)}
 					{children}
 					{isIOS && <span style={styles.background} />}
 					<span ref={this.endRef} />
