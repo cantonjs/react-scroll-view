@@ -32,9 +32,5 @@ export default function Arrow({ color, ...other }) {
 }
 
 Arrow.propTypes = {
-	color: PropTypes.string,
-};
-
-Arrow.defaultProps = {
-	color: '#333',
+	color: PropTypes.string.isRequired,
 };
