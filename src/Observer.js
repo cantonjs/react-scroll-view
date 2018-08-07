@@ -14,13 +14,13 @@ export default class Observer {
 		this.direction = 'down';
 	}
 
-	mount(root, rootMargin) {
+	mount(root, throttle) {
 		this.root = root;
-		this.rootMargin = rootMargin;
+		this.throttle = throttle;
 	}
 
 	create() {
-		const { root, rootMargin } = this;
+		const { root, throttle } = this;
 		const callback = (entries) =>
 			entries.forEach((entry) => {
 				const { target, isIntersecting } = entry;
@@ -35,7 +35,7 @@ export default class Observer {
 			});
 		this.observer = new IntersectionObserver(callback, {
 			root,
-			rootMargin,
+			throttle,
 		});
 	}
 

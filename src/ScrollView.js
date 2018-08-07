@@ -65,9 +65,8 @@ export default class ScrollView extends Component {
 	}
 
 	componentDidMount() {
-		const { dom, props: { endReachedThreshold } } = this;
-		const rootMargin = `${endReachedThreshold}px`;
-		this.observer.mount(dom, rootMargin);
+		const { dom, props: { throttle } } = this;
+		this.observer.mount(dom, throttle);
 		this.observeEndReached();
 	}
 
@@ -227,8 +226,16 @@ export default class ScrollView extends Component {
 						/>
 					)}
 					{children}
-					{isIOS && <span style={styles[direction].background} />}
-					{!isHorizontal && <span ref={this.endRef} />}
+					{isIOS && <div style={styles[direction].background} />}
+					{!isHorizontal && (
+						<div
+							ref={this.endRef}
+							style={{
+								top: -endReachedThreshold,
+								position: 'relative',
+							}}
+						/>
+					)}
 				</div>
 			</ObserverContext.Provider>
 		);
