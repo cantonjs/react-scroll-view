@@ -1,7 +1,7 @@
 import styles from './styles';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { isIOS, debounce } from './util';
+import { isIOS, forwardRef, debounce, refType } from './util';
 import Observer from './Observer';
 import Intersection from './Intersection';
 import RefreshControl from './RefreshControl';
@@ -23,7 +23,7 @@ export default class ScrollView extends Component {
 		onTouchEnd: PropTypes.func,
 		endReachedThreshold: PropTypes.number,
 		isHorizontal: PropTypes.bool,
-		innerRef: PropTypes.func,
+		innerRef: refType,
 		throttle: PropTypes.number,
 		disabled: PropTypes.bool,
 		onRefresh: PropTypes.func,
@@ -92,8 +92,7 @@ export default class ScrollView extends Component {
 	overflowStyle = styles.vertical.main.overflowY;
 
 	scrollViewRef = (dom) => {
-		const { innerRef } = this.props;
-		innerRef && innerRef(dom);
+		forwardRef(this.props.innerRef, dom);
 		this.dom = dom;
 	};
 
@@ -198,6 +197,7 @@ export default class ScrollView extends Component {
 				isRefreshing,
 				refreshControlColor,
 				refreshControlStyle,
+				innerRef,
 				...other
 			},
 			observer,

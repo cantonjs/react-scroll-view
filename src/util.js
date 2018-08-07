@@ -1,3 +1,5 @@
+import { oneOfType, func, object } from 'prop-types';
+
 const iOSUserAgentRegExp = /(iphone|ipod|ipad)/i;
 export const isIOS = iOSUserAgentRegExp.test(navigator.userAgent);
 
@@ -37,4 +39,12 @@ export function debounce(func, wait) {
 	};
 
 	return debounced;
+}
+
+export const refType = oneOfType([func, object]);
+
+export function forwardRef(ref, dom) {
+	if (ref) {
+		typeof ref === 'function' ? ref(dom) : (ref.current = dom);
+	}
 }

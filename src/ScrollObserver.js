@@ -2,20 +2,21 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ObserverContext } from './Contexts';
 import Intersection from './Intersection';
+import { forwardRef, refType } from './util';
 
 export default class ScrollObserver extends Component {
 	static propTypes = {
 		children: PropTypes.func.isRequired,
 		onEnter: PropTypes.func,
 		onLeave: PropTypes.func,
-		innerRef: PropTypes.func,
+		innerRef: refType,
 	};
 
 	state = {
 		isIntersecting: false,
 		ref: (dom) => {
 			const { onEnter, onLeave, props: { innerRef } } = this;
-			innerRef && innerRef(dom);
+			forwardRef(innerRef, dom);
 			this.dom = dom;
 			const intersection = new Intersection({ onEnter, onLeave });
 			if (dom) this.observer.observe(dom, intersection);
