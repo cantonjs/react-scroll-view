@@ -204,7 +204,10 @@ export default class ScrollView extends Component {
 		} = this;
 		const direction = isHorizontal ? 'horizontal' : 'vertical';
 		const styled = { ...styles[direction].main, ...style };
-		if (disabled) styled.overflow = 'hidden';
+		if (disabled) {
+			styled.overflowX = 'hidden';
+			styled.overflowY = 'hidden';
+		}
 		return (
 			<ObserverContext.Provider value={observer}>
 				<div
