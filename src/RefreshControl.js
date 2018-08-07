@@ -1,26 +1,9 @@
+import styles from './styles';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Arrow from './Arrow';
 import Loading from './Loading';
-
-const PullThreshold = 80;
-
-const styles = {
-	container: {
-		height: 0,
-		overflow: 'hidden',
-		position: 'relative',
-	},
-	icon: {
-		width: 100,
-		height: 32,
-		position: 'absolute',
-		left: '50%',
-		bottom: PullThreshold / 2 - 16,
-		marginLeft: -50,
-		textAlign: 'center',
-	},
-};
+import { PullThreshold } from './constants';
 
 export default class RefreshControl extends Component {
 	static propTypes = {
@@ -74,12 +57,12 @@ export default class RefreshControl extends Component {
 				{...other}
 				style={{
 					...style,
-					...styles.container,
+					...styles.refreshControl,
 					minHeight: isRefreshing ? PullThreshold : 0,
 				}}
 				ref={this.domRef}
 			>
-				<div style={styles.icon}>
+				<div style={styles.refreshControlIcon}>
 					{isRefreshing ? (
 						<Loading color={color} />
 					) : (

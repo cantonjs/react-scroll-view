@@ -53,7 +53,6 @@ export default class App extends Component {
 				onEndReached={this.handleEndReached}
 				onRefresh={this.handleRefresh}
 				isRefreshing={isRefreshing}
-				refreshControl
 			>
 				<h1>React Scroll View</h1>
 				<section>

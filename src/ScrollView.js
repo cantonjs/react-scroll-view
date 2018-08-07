@@ -1,3 +1,4 @@
+import styles from './styles';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { isIOS, debounce } from './util';
@@ -5,29 +6,9 @@ import Observer from './Observer';
 import Intersection from './Intersection';
 import RefreshControl from './RefreshControl';
 import { ObserverContext } from './Contexts';
+import warning from 'warning';
 
 // TODO: should add [stickyheaderindices](https://facebook.github.io/react-native/docs/scrollview.html#stickyheaderindices) support
-
-const styles = {
-	main: {
-		overflowY: isIOS ? 'scroll' : 'auto',
-		position: 'relative',
-	},
-	background: {
-		width: '100%',
-		height: 'calc(100% + 2px)',
-		position: 'absolute',
-		top: 0,
-		left: 0,
-		zIndex: -1,
-	},
-};
-
-const overflowStyle = styles.main.overflowY;
-
-if (isIOS) {
-	styles.main.WebkitOverflowScrolling = 'touch';
-}
 
 export default class ScrollView extends Component {
 	static propTypes = {
@@ -41,10 +22,10 @@ export default class ScrollView extends Component {
 		onTouchMove: PropTypes.func,
 		onTouchEnd: PropTypes.func,
 		endReachedThreshold: PropTypes.number,
+		isHorizontal: PropTypes.bool,
 		innerRef: PropTypes.func,
 		throttle: PropTypes.number,
 		disabled: PropTypes.bool,
-		refreshControl: PropTypes.bool,
 		onRefresh: PropTypes.func,
 		isRefreshing: PropTypes.bool,
 		refreshControlColor: PropTypes.string,
@@ -54,14 +35,26 @@ export default class ScrollView extends Component {
 	static defaultProps = {
 		throttle: 0,
 		endReachedThreshold: 0,
+		isHorizontal: false,
 		disabled: false,
 		isRefreshing: false,
-		refreshControl: false,
 		refreshControlColor: '#333',
 	};
 
 	constructor(props) {
 		super(props);
+
+		const { isHorizontal, onEndReached, onRefresh } = props;
+
+		warning(
+			!isHorizontal || !onRefresh,
+			'`onRefresh` with `isHorizontal` is NOT supported, `onRefresh` will be ignored',
+		);
+
+		warning(
+			!isHorizontal || !onEndReached,
+			'`onEndReached` with `isHorizontal` is NOT supported, `onEndReached` will be ignored',
+		);
 
 		this.observer = new Observer();
 		this.toEmitOnScrollEnd = debounce((ev) => {
@@ -86,14 +79,18 @@ export default class ScrollView extends Component {
 		}
 		if (prevProps.isRefreshing && !isRefreshing) {
 			const { refreshControl } = this;
-			refreshControl.end();
-			refreshControl.setHeight(0);
+			if (refreshControl) {
+				refreshControl.end();
+				refreshControl.setHeight(0);
+			}
 		}
 	}
 
 	componentWillUnmount() {
 		this.toEmitOnScrollEnd.clearDebounce();
 	}
+
+	overflowStyle = styles.vertical.main.overflowY;
 
 	scrollViewRef = (dom) => {
 		const { innerRef } = this.props;
@@ -111,14 +108,15 @@ export default class ScrollView extends Component {
 
 	observeEndReached() {
 		const { end, props: { onEndReached } } = this;
-		if (onEndReached) {
+		if (end && onEndReached) {
 			const intersection = new Intersection({ onEnter: onEndReached });
 			this.observer.observe(end, intersection);
 		}
 	}
 
 	unobserveEndReached() {
-		this.observer.unobserve(this.end);
+		const { end } = this;
+		if (end) this.observer.unobserve(end);
 	}
 
 	handleScroll = (ev) => {
@@ -133,18 +131,18 @@ export default class ScrollView extends Component {
 	};
 
 	handleTouchStart = (ev) => {
-		const { onTouchStart, refreshControl } = this.props;
+		const { onTouchStart, onRefresh } = this.props;
 		onTouchStart && onTouchStart(ev);
-		if (!refreshControl) return;
+		if (!onRefresh) return;
 		if (this.dom.scrollTop <= 0) {
 			this.y0 = ev.touches[0].clientY;
 		}
 	};
 
 	handleTouchMove = (ev) => {
-		const { onTouchMove, refreshControl } = this.props;
+		const { onTouchMove, onRefresh } = this.props;
 		onTouchMove && onTouchMove(ev);
-		if (!refreshControl) return;
+		if (!onRefresh) return;
 		if (this.y0) {
 			const dy = ev.touches[0].clientY - this.y0;
 			if (dy > 0 && !this.isPullingDown) {
@@ -154,7 +152,7 @@ export default class ScrollView extends Component {
 			}
 			else if (dy <= 0 && this.isPullingDown) {
 				this.refreshControl.setHeight(0);
-				this.dom.style.overflowY = overflowStyle;
+				this.dom.style.overflowY = this.overflowStyle;
 				this.isPullingDown = false;
 			}
 			if (this.isPullingDown) {
@@ -164,14 +162,14 @@ export default class ScrollView extends Component {
 	};
 
 	handleTouchEnd = (ev) => {
-		const { onTouchEnd, onRefresh, refreshControl, isRefreshing } = this.props;
+		const { onTouchEnd, onRefresh, isRefreshing } = this.props;
 		onTouchEnd && onTouchEnd(ev);
-		if (!refreshControl) return;
+		if (!onRefresh) return;
 		this.y0 = null;
 		if (isRefreshing || this.isPullingDown) {
 			const { refreshControl } = this;
 			if (!isRefreshing && refreshControl.shouldRefresh) {
-				onRefresh && onRefresh();
+				onRefresh();
 			}
 			refreshControl.end();
 			if (isRefreshing || refreshControl.shouldRefresh) {
@@ -180,7 +178,7 @@ export default class ScrollView extends Component {
 			else {
 				refreshControl.setHeight(0);
 			}
-			this.dom.style.overflowY = overflowStyle;
+			this.dom.style.overflowY = this.overflowStyle;
 			this.isPullingDown = false;
 		}
 	};
@@ -194,18 +192,19 @@ export default class ScrollView extends Component {
 				onScrollEnd,
 				onEndReached,
 				endReachedThreshold,
+				isHorizontal,
 				onRefresh,
 				throttle,
 				disabled,
 				isRefreshing,
-				refreshControl,
 				refreshControlColor,
 				refreshControlStyle,
 				...other
 			},
 			observer,
 		} = this;
-		const styled = { ...styles.main, ...style };
+		const direction = isHorizontal ? 'horizontal' : 'vertical';
+		const styled = { ...styles[direction].main, ...style };
 		if (disabled) styled.overflow = 'hidden';
 		return (
 			<ObserverContext.Provider value={observer}>
@@ -218,7 +217,8 @@ export default class ScrollView extends Component {
 					onTouchMove={this.handleTouchMove}
 					onTouchEnd={this.handleTouchEnd}
 				>
-					{refreshControl && (
+					{!isHorizontal &&
+						onRefresh && (
 						<RefreshControl
 							ref={this.refreshControlRef}
 							isRefreshing={isRefreshing}
@@ -227,8 +227,8 @@ export default class ScrollView extends Component {
 						/>
 					)}
 					{children}
-					{isIOS && <span style={styles.background} />}
-					<span ref={this.endRef} />
+					{isIOS && <span style={styles[direction].background} />}
+					{!isHorizontal && <span ref={this.endRef} />}
 				</div>
 			</ObserverContext.Provider>
 		);
