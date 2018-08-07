@@ -18,7 +18,7 @@ export default class ScrollObserver extends Component {
 			innerRef && innerRef(dom);
 			this.dom = dom;
 			const intersection = new Intersection({ onEnter, onLeave });
-			this.observer.observe(dom, intersection);
+			if (dom) this.observer.observe(dom, intersection);
 		},
 	};
 
