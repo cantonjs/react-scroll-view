@@ -8,8 +8,6 @@ import RefreshControl from './RefreshControl';
 import { ObserverContext } from './Contexts';
 import warning from 'warning';
 
-// TODO: should add [stickyheaderindices](https://facebook.github.io/react-native/docs/scrollview.html#stickyheaderindices) support
-
 export default class ScrollView extends Component {
 	static propTypes = {
 		style: PropTypes.object,
