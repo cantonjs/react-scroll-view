@@ -14,13 +14,12 @@ export default class Observer {
 		this.direction = 'down';
 	}
 
-	mount(root, throttle) {
+	mount(root) {
 		this.root = root;
-		this.throttle = throttle;
 	}
 
 	create() {
-		const { root, throttle } = this;
+		const { root } = this;
 		const callback = (entries) =>
 			entries.forEach((entry) => {
 				const { target, isIntersecting } = entry;
@@ -33,10 +32,7 @@ export default class Observer {
 					else if (isMounted) intersection.onLeave(direction);
 				}
 			});
-		this.observer = new IntersectionObserver(callback, {
-			root,
-			throttle,
-		});
+		this.observer = new IntersectionObserver(callback, { root });
 	}
 
 	removeObserver() {

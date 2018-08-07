@@ -22,7 +22,6 @@ export default class ScrollView extends Component {
 		endReachedThreshold: PropTypes.number,
 		isHorizontal: PropTypes.bool,
 		innerRef: refType,
-		throttle: PropTypes.number,
 		disabled: PropTypes.bool,
 		onRefresh: PropTypes.func,
 		isRefreshing: PropTypes.bool,
@@ -31,7 +30,6 @@ export default class ScrollView extends Component {
 	};
 
 	static defaultProps = {
-		throttle: 0,
 		endReachedThreshold: 0,
 		isHorizontal: false,
 		disabled: false,
@@ -63,8 +61,8 @@ export default class ScrollView extends Component {
 	}
 
 	componentDidMount() {
-		const { dom, props: { throttle } } = this;
-		this.observer.mount(dom, throttle);
+		const { dom } = this;
+		this.observer.mount(dom);
 		this.observeEndReached();
 	}
 
@@ -190,7 +188,6 @@ export default class ScrollView extends Component {
 				endReachedThreshold,
 				isHorizontal,
 				onRefresh,
-				throttle,
 				disabled,
 				isRefreshing,
 				refreshControlColor,
