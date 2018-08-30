@@ -17,6 +17,10 @@ const styles = {
 	contentContainer: {
 		padding: 40,
 	},
+	sticky: {
+		width: '100%',
+		backgroundColor: 'rgba(255, 255, 255, 0.96)',
+	},
 };
 
 export default class App extends Component {
@@ -57,7 +61,7 @@ export default class App extends Component {
 				isRefreshing={isRefreshing}
 			>
 				<StickySection>
-					<Sticky height={88}>
+					<Sticky style={styles.sticky}>
 						<h1>React Scroll View</h1>
 					</Sticky>
 					<p>
@@ -102,7 +106,7 @@ export default class App extends Component {
 					</p>
 				</StickySection>
 				<StickySection>
-					<Sticky height={88}>
+					<Sticky style={styles.sticky}>
 						<h1>Ut mollis hendrerit erat fermentum tristique.</h1>
 					</Sticky>
 					<p>
@@ -144,7 +148,7 @@ export default class App extends Component {
 					</p>
 				</StickySection>
 				<StickySection>
-					<Sticky height={88}>
+					<Sticky style={styles.sticky}>
 						<h1>
 							Maecenas pellentesque nunc sapien, a interdum nisl ultrices in.
 						</h1>
@@ -188,128 +192,136 @@ export default class App extends Component {
 					</p>
 				</StickySection>
 				<StickySection style={{ height: 500, background: '#f4f4f4' }}>
-					<Sticky style={{ background: 'gray' }} height={44}>
-						<h1 style={{ margin: 0 }}>Stickies...</h1>
+					<Sticky style={styles.sticky}>
+						<h1 style={{ margin: 0 }}>Sticky</h1>
 					</Sticky>
 					<p>list 1</p>
 					<p>list 2</p>
 					<p>list 3</p>
 				</StickySection>
-				<p>
-					Vestibulum nec quam rhoncus libero elementum volutpat. Morbi id ligula
-					eget lectus tristique rutrum. Vestibulum ac consequat nulla. In
-					vestibulum sollicitudin tempor. Quisque egestas, arcu at condimentum
-					pretium, ipsum sem tincidunt ipsum, sit amet vulputate massa ante eget
-					erat. Vestibulum leo ex, suscipit sed ipsum quis, scelerisque
-					malesuada est. Aenean eu tincidunt nulla. Pellentesque habitant morbi
-					tristique senectus et netus et malesuada fames ac turpis egestas.
-				</p>
-				<p>
-					Fusce semper blandit orci at cursus. Praesent vitae bibendum tortor.
-					Pellentesque dui ligula, aliquet egestas felis vel, rutrum dictum
-					velit. Nunc ac rhoncus erat. Nam faucibus neque quis diam ultrices, a
-					tristique ipsum tempor. Quisque egestas ex tortor, eu faucibus odio
-					elementum sit amet. Ut varius convallis ligula ac elementum.
-				</p>
-				<p>
-					Aliquam semper dolor eu vestibulum fringilla. Curabitur eget tellus
-					leo. Suspendisse maximus in tortor vel fringilla. Sed diam ligula,
-					laoreet eu velit vel, fermentum fringilla enim. Aliquam fermentum
-					neque sed est scelerisque fermentum. Vivamus sollicitudin, velit a
-					congue tincidunt, urna neque gravida leo, sit amet efficitur nulla
-					tellus ut ex. Aliquam dapibus a mauris sed mattis. Pellentesque eu
-					placerat ex, eu pulvinar risus.
-				</p>
-				<p>
-					Nam venenatis sodales enim. Praesent auctor erat ligula, eu feugiat ex
-					ultricies et. Cras condimentum ut purus venenatis volutpat. Curabitur
-					tellus ex, pharetra dignissim pulvinar at, semper a risus. Donec ut
-					posuere nisl. Ut non elit non tellus cursus scelerisque. Fusce et
-					hendrerit libero. Ut vestibulum iaculis laoreet. Aliquam blandit, eros
-					consectetur iaculis convallis, justo lacus tincidunt arcu, sed
-					imperdiet eros justo at augue. Phasellus auctor leo vel egestas
-					sodales. Aliquam erat volutpat. Nullam mollis vestibulum massa in
-					dictum. Vestibulum vel lacinia lacus. Ut bibendum et ligula sit amet
-					fermentum. Aliquam ante enim, pretium eget malesuada quis, luctus sit
-					amet odio.
-				</p>
-				<p>
-					Donec libero diam, pellentesque eget fermentum a, pharetra sit amet
-					ipsum. Pellentesque sed est at tellus cursus fringilla. Etiam et
-					molestie velit. Nunc tempus placerat velit, facilisis ullamcorper erat
-					faucibus ac. Etiam pharetra lectus purus, sed accumsan ligula
-					malesuada in. Aliquam erat volutpat. Nam eros odio, congue et odio
-					eget, eleifend viverra neque. Proin ullamcorper commodo nulla vel
-					bibendum. Nam congue arcu odio, a placerat tellus dictum eu. Sed enim
-					mi, molestie vitae finibus id, condimentum in ex. Vestibulum cursus,
-					tortor eget bibendum porttitor, enim justo ultrices arcu, quis blandit
-					nibh enim a quam. Nulla eu ipsum augue. Vivamus eu lorem a mi dictum
-					viverra.
-				</p>
-				<LazyElement>
-					<h1>Lazy</h1>
-				</LazyElement>
-				<p>
-					In bibendum cursus erat, molestie varius nibh varius sed. Donec orci
-					libero, consequat sed viverra non, blandit vitae nibh. Morbi quis
-					pellentesque tortor, vestibulum iaculis felis. Mauris at lacinia elit.
-					Suspendisse fringilla erat ac odio gravida tempus. Integer enim ipsum,
-					laoreet non vulputate vel, eleifend sed mi. Nulla laoreet, sapien nec
-					sagittis scelerisque, quam nulla lobortis tellus, id accumsan neque
-					tellus eget arcu. Suspendisse sollicitudin, augue eu egestas viverra,
-					sem nisi blandit turpis, non vestibulum eros sem id diam.
-				</p>
-				<p>
-					Ut volutpat lacus non tortor sollicitudin, non pulvinar elit porta.
-					Donec sollicitudin, est eu lobortis porttitor, augue nibh mattis dui,
-					nec ullamcorper neque massa in ipsum. Donec eu libero a massa aliquam
-					congue vestibulum id quam. Duis justo diam, suscipit in sagittis nec,
-					rhoncus eget dui. Cras molestie quam turpis, ut sodales sem ultricies
-					mollis. Quisque tortor tellus, accumsan in pretium in, euismod et
-					magna. Duis consequat semper quam id pellentesque. Integer condimentum
-					massa ut magna feugiat, eu tempor turpis molestie. Duis finibus, risus
-					vitae placerat convallis, mauris libero efficitur magna, quis
-					efficitur ligula dui ac tellus. Nunc vulputate purus pulvinar mauris
-					egestas, id consequat ligula aliquet. Donec tempus gravida erat eu
-					posuere.
-				</p>
-				<p>
-					Etiam maximus ultrices purus eget eleifend. Nullam vel pellentesque
-					sem. Integer libero leo, dictum at arcu eu, egestas sagittis sapien.
-					Aliquam non quam metus. Aliquam vestibulum posuere nisl, a imperdiet
-					urna dapibus sit amet. Aenean in ligula at neque venenatis vestibulum.
-					Sed et tincidunt velit. Ut vestibulum commodo pretium.
-				</p>
-				<p>
-					In sit amet viverra nisi, vitae consequat felis. Vestibulum non nunc a
-					nunc tincidunt consequat sed non ante. Maecenas ante lorem, tincidunt
-					nec semper nec, feugiat ac nunc. Proin in leo velit. Etiam accumsan
-					lectus sed fringilla vulputate. Donec maximus dolor sit amet
-					sollicitudin commodo. Sed facilisis ut dolor id pulvinar. Praesent et
-					nisl neque. Cras euismod augue et odio lobortis porta sed non neque.
-				</p>
-				<p>
-					Aliquam libero ipsum, consequat ac sem non, volutpat posuere erat.
-					Duis pulvinar tincidunt leo, et tempor eros commodo in. Aliquam in
-					feugiat metus. Nam ac sollicitudin velit. Integer bibendum, ipsum quis
-					vestibulum volutpat, dolor felis rhoncus tellus, quis laoreet sem enim
-					id urna. Suspendisse sagittis id velit quis rutrum. Nullam vitae
-					convallis nulla. Suspendisse leo nisl, dictum nec mi non, elementum
-					varius risus. Mauris at dui ipsum. Morbi rutrum efficitur scelerisque.
-					Mauris quis dictum est. Praesent placerat sit amet tellus quis
-					sodales. Vestibulum eget dui eu ligula rutrum faucibus. Curabitur
-					interdum dolor felis, ac suscipit magna scelerisque nec. Duis sed
-					ultrices augue.
-				</p>
-				<p>
-					Integer vehicula massa ipsum, non mollis urna consectetur nec. Donec
-					quis sem tincidunt, commodo justo ac, pellentesque purus. Phasellus
-					ultrices, velit a eleifend rutrum, augue justo sagittis lorem, sed
-					finibus erat velit vel augue. Duis fermentum in lectus eget pretium.
-					Nullam eu condimentum mauris. Nam euismod ante vitae convallis
-					convallis. Sed nec consequat nisi. Nulla facilisi. Nunc a felis nec mi
-					tempor tempus non ut orci.
-				</p>
+				<StickySection>
+					<Sticky style={styles.sticky}>
+						<h1>Etiam maximus ultrices purus eget eleifend.</h1>
+					</Sticky>
+					<p>
+						Vestibulum nec quam rhoncus libero elementum volutpat. Morbi id
+						ligula eget lectus tristique rutrum. Vestibulum ac consequat nulla.
+						In vestibulum sollicitudin tempor. Quisque egestas, arcu at
+						condimentum pretium, ipsum sem tincidunt ipsum, sit amet vulputate
+						massa ante eget erat. Vestibulum leo ex, suscipit sed ipsum quis,
+						scelerisque malesuada est. Aenean eu tincidunt nulla. Pellentesque
+						habitant morbi tristique senectus et netus et malesuada fames ac
+						turpis egestas.
+					</p>
+					<p>
+						Fusce semper blandit orci at cursus. Praesent vitae bibendum tortor.
+						Pellentesque dui ligula, aliquet egestas felis vel, rutrum dictum
+						velit. Nunc ac rhoncus erat. Nam faucibus neque quis diam ultrices,
+						a tristique ipsum tempor. Quisque egestas ex tortor, eu faucibus
+						odio elementum sit amet. Ut varius convallis ligula ac elementum.
+					</p>
+					<p>
+						Aliquam semper dolor eu vestibulum fringilla. Curabitur eget tellus
+						leo. Suspendisse maximus in tortor vel fringilla. Sed diam ligula,
+						laoreet eu velit vel, fermentum fringilla enim. Aliquam fermentum
+						neque sed est scelerisque fermentum. Vivamus sollicitudin, velit a
+						congue tincidunt, urna neque gravida leo, sit amet efficitur nulla
+						tellus ut ex. Aliquam dapibus a mauris sed mattis. Pellentesque eu
+						placerat ex, eu pulvinar risus.
+					</p>
+					<p>
+						Nam venenatis sodales enim. Praesent auctor erat ligula, eu feugiat
+						ex ultricies et. Cras condimentum ut purus venenatis volutpat.
+						Curabitur tellus ex, pharetra dignissim pulvinar at, semper a risus.
+						Donec ut posuere nisl. Ut non elit non tellus cursus scelerisque.
+						Fusce et hendrerit libero. Ut vestibulum iaculis laoreet. Aliquam
+						blandit, eros consectetur iaculis convallis, justo lacus tincidunt
+						arcu, sed imperdiet eros justo at augue. Phasellus auctor leo vel
+						egestas sodales. Aliquam erat volutpat. Nullam mollis vestibulum
+						massa in dictum. Vestibulum vel lacinia lacus. Ut bibendum et ligula
+						sit amet fermentum. Aliquam ante enim, pretium eget malesuada quis,
+						luctus sit amet odio.
+					</p>
+					<p>
+						Donec libero diam, pellentesque eget fermentum a, pharetra sit amet
+						ipsum. Pellentesque sed est at tellus cursus fringilla. Etiam et
+						molestie velit. Nunc tempus placerat velit, facilisis ullamcorper
+						erat faucibus ac. Etiam pharetra lectus purus, sed accumsan ligula
+						malesuada in. Aliquam erat volutpat. Nam eros odio, congue et odio
+						eget, eleifend viverra neque. Proin ullamcorper commodo nulla vel
+						bibendum. Nam congue arcu odio, a placerat tellus dictum eu. Sed
+						enim mi, molestie vitae finibus id, condimentum in ex. Vestibulum
+						cursus, tortor eget bibendum porttitor, enim justo ultrices arcu,
+						quis blandit nibh enim a quam. Nulla eu ipsum augue. Vivamus eu
+						lorem a mi dictum viverra.
+					</p>
+					<LazyElement>
+						<h1>Lazy</h1>
+					</LazyElement>
+					<p>
+						In bibendum cursus erat, molestie varius nibh varius sed. Donec orci
+						libero, consequat sed viverra non, blandit vitae nibh. Morbi quis
+						pellentesque tortor, vestibulum iaculis felis. Mauris at lacinia
+						elit. Suspendisse fringilla erat ac odio gravida tempus. Integer
+						enim ipsum, laoreet non vulputate vel, eleifend sed mi. Nulla
+						laoreet, sapien nec sagittis scelerisque, quam nulla lobortis
+						tellus, id accumsan neque tellus eget arcu. Suspendisse
+						sollicitudin, augue eu egestas viverra, sem nisi blandit turpis, non
+						vestibulum eros sem id diam.
+					</p>
+					<p>
+						Ut volutpat lacus non tortor sollicitudin, non pulvinar elit porta.
+						Donec sollicitudin, est eu lobortis porttitor, augue nibh mattis
+						dui, nec ullamcorper neque massa in ipsum. Donec eu libero a massa
+						aliquam congue vestibulum id quam. Duis justo diam, suscipit in
+						sagittis nec, rhoncus eget dui. Cras molestie quam turpis, ut
+						sodales sem ultricies mollis. Quisque tortor tellus, accumsan in
+						pretium in, euismod et magna. Duis consequat semper quam id
+						pellentesque. Integer condimentum massa ut magna feugiat, eu tempor
+						turpis molestie. Duis finibus, risus vitae placerat convallis,
+						mauris libero efficitur magna, quis efficitur ligula dui ac tellus.
+						Nunc vulputate purus pulvinar mauris egestas, id consequat ligula
+						aliquet. Donec tempus gravida erat eu posuere.
+					</p>
+					<p>
+						Nullam vel pellentesque sem. Integer libero leo, dictum at arcu eu,
+						egestas sagittis sapien. Aliquam non quam metus. Aliquam vestibulum
+						posuere nisl, a imperdiet urna dapibus sit amet. Aenean in ligula at
+						neque venenatis vestibulum. Sed et tincidunt velit. Ut vestibulum
+						commodo pretium.
+					</p>
+					<p>
+						In sit amet viverra nisi, vitae consequat felis. Vestibulum non nunc
+						a nunc tincidunt consequat sed non ante. Maecenas ante lorem,
+						tincidunt nec semper nec, feugiat ac nunc. Proin in leo velit. Etiam
+						accumsan lectus sed fringilla vulputate. Donec maximus dolor sit
+						amet sollicitudin commodo. Sed facilisis ut dolor id pulvinar.
+						Praesent et nisl neque. Cras euismod augue et odio lobortis porta
+						sed non neque.
+					</p>
+					<p>
+						Aliquam libero ipsum, consequat ac sem non, volutpat posuere erat.
+						Duis pulvinar tincidunt leo, et tempor eros commodo in. Aliquam in
+						feugiat metus. Nam ac sollicitudin velit. Integer bibendum, ipsum
+						quis vestibulum volutpat, dolor felis rhoncus tellus, quis laoreet
+						sem enim id urna. Suspendisse sagittis id velit quis rutrum. Nullam
+						vitae convallis nulla. Suspendisse leo nisl, dictum nec mi non,
+						elementum varius risus. Mauris at dui ipsum. Morbi rutrum efficitur
+						scelerisque. Mauris quis dictum est. Praesent placerat sit amet
+						tellus quis sodales. Vestibulum eget dui eu ligula rutrum faucibus.
+						Curabitur interdum dolor felis, ac suscipit magna scelerisque nec.
+						Duis sed ultrices augue.
+					</p>
+					<p>
+						Integer vehicula massa ipsum, non mollis urna consectetur nec. Donec
+						quis sem tincidunt, commodo justo ac, pellentesque purus. Phasellus
+						ultrices, velit a eleifend rutrum, augue justo sagittis lorem, sed
+						finibus erat velit vel augue. Duis fermentum in lectus eget pretium.
+						Nullam eu condimentum mauris. Nam euismod ante vitae convallis
+						convallis. Sed nec consequat nisi. Nulla facilisi. Nunc a felis nec
+						mi tempor tempus non ut orci.
+					</p>
+				</StickySection>
 			</ScrollView>
 		);
 	}

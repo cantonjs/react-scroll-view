@@ -10,11 +10,11 @@ export default class StickySection extends Component {
 	};
 
 	state = {
-		sticky: {},
+		stickyStyle: {},
 		isIntersecting: false,
 		status: 'top',
-		setSticky: (sticky) => {
-			this.setState({ sticky });
+		setStickyStyle: (stickyStyle) => {
+			this.setState({ stickyStyle });
 		},
 	};
 
@@ -45,23 +45,26 @@ export default class StickySection extends Component {
 	renderChildren = ({ ref }) => {
 		const {
 			props: { children, style, ...other },
-			state: { sticky, status },
+			state: { stickyStyle, status },
 		} = this;
 		return (
 			<div {...other} ref={ref} style={{ position: 'relative', ...style }}>
-				{status !== 'top' && <div style={sticky} />}
+				{status !== 'top' && <div style={stickyStyle} />}
 				{children}
 			</div>
 		);
 	};
 
 	render() {
-		const { props: { children, style, ...other }, state: { sticky } } = this;
-		const stickyHeight = sticky.height || 0;
+		const {
+			props: { children, style, ...other },
+			state: { stickyStyle },
+		} = this;
+		const stickyHeight = stickyStyle.height || 0;
 		return (
 			<StickyContext.Provider value={this.state}>
 				<div {...other} style={{ position: 'relative', ...style }}>
-					<div style={sticky} />
+					<div style={stickyStyle} />
 					<ScrollObserver
 						onLeave={this.handleTopLeave}
 						onEnter={this.handleTopEnter}

@@ -3,51 +3,37 @@ import PropTypes from 'prop-types';
 import { StickyContext } from './Contexts';
 import Fixed from './Fixed';
 
-// IntersectionObserver.prototype.POLL_INTERVAL = 50;
-
 export default class Sticky extends Component {
 	static propTypes = {
 		children: PropTypes.node,
 		style: PropTypes.object,
-		height: PropTypes.number,
 	};
 
-	componentDidMount() {
-		const { stickyContext, props: { height } } = this;
-		if (stickyContext) {
-			stickyContext.setSticky({ height });
-		}
-	}
-
-	saveStickyContext(stickyContext) {
-		this.stickyContext = stickyContext;
-	}
-
 	saveDOMNode = (dom) => {
+		if (!this.dom && this.stickyContext) {
+			const { left, right, width, height } = dom.getBoundingClientRect();
+			this.stickyContext.setStickyStyle({ left, right, width, height });
+		}
 		this.dom = dom;
 	};
 
 	renderChildren = (stickyContext) => {
-		this.saveStickyContext(stickyContext);
+		this.stickyContext = stickyContext;
 		const {
-			props: { style, height, children, ...other },
+			props: { style, children, ...other },
 			stickyContext: { status },
-			dom,
 		} = this;
 
 		if (status === 'fixed') {
-			const { left, width } = dom.getBoundingClientRect();
 			return (
 				<Fixed>
 					<div
 						{...other}
 						style={{
 							...style,
+							...stickyContext.stickyStyle,
 							position: 'absolute',
 							top: 0,
-							left,
-							width,
-							height,
 						}}
 					>
 						{children}
@@ -62,11 +48,10 @@ export default class Sticky extends Component {
 					ref={this.saveDOMNode}
 					style={{
 						...style,
-						height,
+						...stickyContext.stickyStyle,
 						position: 'absolute',
-						[status]: 0,
 						left: 0,
-						right: 0,
+						[status]: 0,
 					}}
 				>
 					{children}
