@@ -1,4 +1,4 @@
-import { oneOfType, func, object, string, arrayOf } from 'prop-types';
+import { oneOfType, func, object, number, arrayOf } from 'prop-types';
 
 export const refType = oneOfType([func, object]);
-export const thresholdType = oneOfType([string, arrayOf(string)]);
+export const thresholdType = oneOfType([number, arrayOf(number)]);

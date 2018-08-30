@@ -1,21 +1,19 @@
+import { noop } from './util';
+
 export default class Intersection {
-	constructor({ onEnter, onLeave }) {
-		this.isValid = !!(onEnter || onLeave);
-		if (!this.isValid) return this;
-		this._onEnter = onEnter;
-		this._onLeave = onLeave;
-		this.isMounted = false;
+	constructor({ onEnter, onLeave, onIntersect }) {
+		this._onIntersect = onIntersect || noop;
+		this.onEnter = onEnter || noop;
+		this.onLeave = onLeave || noop;
+		this._isIntersecting = false;
 	}
 
-	mount() {
-		this.isMounted = true;
-	}
-
-	onEnter(...args) {
-		if (this._onEnter) return this._onEnter(...args);
-	}
-
-	onLeave(...args) {
-		if (this._onLeave) return this._onLeave(...args);
+	onIntersect(entry, ...args) {
+		const { isIntersecting } = entry;
+		if (this._isIntersecting !== isIntersecting) {
+			this._isIntersecting = isIntersecting;
+			this[isIntersecting ? 'onEnter' : 'onLeave'](...args);
+		}
+		this._onIntersect(entry, ...args);
 	}
 }

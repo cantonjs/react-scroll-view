@@ -10,6 +10,7 @@ export default class ScrollObserver extends Component {
 		children: PropTypes.func.isRequired,
 		onEnter: PropTypes.func,
 		onLeave: PropTypes.func,
+		onIntersect: PropTypes.func,
 		rootMargin: PropTypes.string,
 		threshold: thresholdType,
 		innerRef: refType,
@@ -24,9 +25,14 @@ export default class ScrollObserver extends Component {
 	};
 
 	componentDidMount() {
-		const { onEnter, onLeave, dom, props: { rootMargin, threshold } } = this;
+		const {
+			onEnter,
+			onLeave,
+			dom,
+			props: { rootMargin, threshold, onIntersect },
+		} = this;
 		process.nextTick(() => {
-			const intersection = new Intersection({ onEnter, onLeave });
+			const intersection = new Intersection({ onEnter, onLeave, onIntersect });
 			if (dom) {
 				const options = { rootMargin, threshold };
 				this.observer.observe(dom, intersection, options);

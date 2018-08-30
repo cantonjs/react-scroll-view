@@ -186,7 +186,7 @@ export default class ScrollView extends Component {
 				onScrollStart,
 				onScrollEnd,
 				onEndReached,
-				endReachedThreshold,
+				// endReachedThreshold,
 				isHorizontal,
 				onRefresh,
 				disabled,

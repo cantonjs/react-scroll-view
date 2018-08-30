@@ -1,5 +1,6 @@
 import Map from './MapPolyfill';
 import warning from 'warning';
+import Intersection from './Intersection';
 
 if (!IntersectionObserver) {
 	throw new Error(
@@ -35,17 +36,14 @@ export default class Observer {
 			);
 		}
 
-		if (intersection.isValid && !this._boxes.has(target)) {
+		if (intersection instanceof Intersection && !this._boxes.has(target)) {
 			const callback = (entries) =>
 				entries.forEach((entry) => {
-					const { target, isIntersecting } = entry;
+					const { target } = entry;
 					const { direction, _boxes } = this;
 					if (_boxes.has(target)) {
 						const { intersection } = _boxes.get(target);
-						const { isMounted } = intersection;
-						if (!isMounted) intersection.mount();
-						if (isIntersecting) intersection.onEnter(direction);
-						else if (isMounted) intersection.onLeave(direction);
+						intersection.onIntersect(entry, direction);
 					}
 				});
 			const observer = new IntersectionObserver(callback, {
