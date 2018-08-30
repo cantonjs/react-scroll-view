@@ -56,6 +56,13 @@ const styles = {
 		marginLeft: -50,
 		textAlign: 'center',
 	},
+	fixedContainer: {
+		position: 'fixed',
+		left: 0,
+		right: 0,
+		top: 0,
+		zIndex: 666666,
+	},
 };
 
 export default styles;

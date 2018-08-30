@@ -5,6 +5,8 @@ export const createId = function createId() {
 	return (createId.id = (createId.id || 0) + 1);
 };
 
+export const noop = () => {};
+
 export function debounce(func, wait) {
 	let timeoutId;
 	let timestamp;

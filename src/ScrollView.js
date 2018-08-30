@@ -4,14 +4,17 @@ import PropTypes from 'prop-types';
 import { isIOS, forwardRef, debounce } from './util';
 import { refType } from './PropTypes';
 import Observer from './Observer';
+import Fragment from './Fragment';
 import Intersection from './Intersection';
 import RefreshControl from './RefreshControl';
-import { ObserverContext } from './Contexts';
+import { ObserverContext, FixedContext } from './Contexts';
 import warning from 'warning';
 
 export default class ScrollView extends Component {
 	static propTypes = {
 		style: PropTypes.object,
+		contentContainerStyle: PropTypes.object,
+		contentContainerClassName: PropTypes.string,
 		children: PropTypes.node,
 		onScrollStart: PropTypes.func,
 		onScroll: PropTypes.func,
@@ -59,6 +62,22 @@ export default class ScrollView extends Component {
 			this.isScrolling = false;
 			onScrollEnd && onScrollEnd(ev);
 		}, 100);
+
+		this.fixedChildren = [];
+		this.fixedContext = {
+			isRoot: false,
+			mount: (children) => {
+				this.fixedChildren.push(children);
+				this.forceUpdate();
+			},
+			unmount: (children) => {
+				const index = this.fixedChildren.indexOf(children);
+				if (index > -1) {
+					this.fixedChildren.splice(index, 1);
+					this.forceUpdate();
+				}
+			},
+		};
 	}
 
 	componentDidMount() {
@@ -178,10 +197,12 @@ export default class ScrollView extends Component {
 		}
 	};
 
-	render() {
+	renderChildren = (parentFixedContext) => {
 		const {
 			props: {
 				style,
+				contentContainerStyle,
+				contentContainerClassName,
 				children,
 				onScrollStart,
 				onScrollEnd,
@@ -197,6 +218,8 @@ export default class ScrollView extends Component {
 				...other
 			},
 			observer,
+			fixedChildren,
+			fixedContext,
 		} = this;
 		const direction = isHorizontal ? 'horizontal' : 'vertical';
 		const styled = { ...styles[direction].main, ...style };
@@ -206,29 +229,45 @@ export default class ScrollView extends Component {
 		}
 		return (
 			<ObserverContext.Provider value={observer}>
-				<div
-					{...other}
-					style={styled}
-					ref={this.scrollViewRef}
-					onScroll={this.handleScroll}
-					onTouchStart={this.handleTouchStart}
-					onTouchMove={this.handleTouchMove}
-					onTouchEnd={this.handleTouchEnd}
-				>
-					{!isHorizontal &&
-						onRefresh && (
-						<RefreshControl
-							ref={this.refreshControlRef}
-							isRefreshing={isRefreshing}
-							color={refreshControlColor}
-							style={refreshControlStyle}
-						/>
-					)}
-					{children}
-					{isIOS && <div style={styles[direction].background} />}
-					{!isHorizontal && <div ref={this.endRef} />}
-				</div>
+				<FixedContext.Provider value={parentFixedContext || fixedContext}>
+					<Fragment>
+						{!parentFixedContext && (
+							<div style={styles.fixedContainer}>{fixedChildren}</div>
+						)}
+						<div
+							{...other}
+							style={styled}
+							ref={this.scrollViewRef}
+							onScroll={this.handleScroll}
+							onTouchStart={this.handleTouchStart}
+							onTouchMove={this.handleTouchMove}
+							onTouchEnd={this.handleTouchEnd}
+						>
+							{!isHorizontal &&
+								onRefresh && (
+								<RefreshControl
+									ref={this.refreshControlRef}
+									isRefreshing={isRefreshing}
+									color={refreshControlColor}
+									style={refreshControlStyle}
+								/>
+							)}
+							<div
+								style={contentContainerStyle}
+								className={contentContainerClassName}
+							>
+								{children}
+							</div>
+							{isIOS && <div style={styles[direction].background} />}
+							{!isHorizontal && <div ref={this.endRef} />}
+						</div>
+					</Fragment>
+				</FixedContext.Provider>
 			</ObserverContext.Provider>
 		);
+	};
+
+	render() {
+		return <FixedContext.Consumer>{this.renderChildren}</FixedContext.Consumer>;
 	}
 }
