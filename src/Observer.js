@@ -2,7 +2,11 @@ import Map from './MapPolyfill';
 
 if (!IntersectionObserver) {
 	throw new Error(
-		'react-scroll-view requires `IntersectionObserver`. You may add this polyfill to fix the issue. `https://github.com/w3c/IntersectionObserver/tree/master/polyfill`',
+		[
+			'react-scroll-view requires `IntersectionObserver`.',
+			'You may add this polyfill to fix the issue.',
+			'`https://github.com/w3c/IntersectionObserver/tree/master/polyfill`',
+		].join(' '),
 	);
 }
 
