@@ -2,26 +2,37 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ObserverContext } from './Contexts';
 import Intersection from './Intersection';
-import { forwardRef, refType } from './util';
+import { forwardRef } from './util';
+import { refType, thresholdType } from './PropTypes';
 
 export default class ScrollObserver extends Component {
 	static propTypes = {
 		children: PropTypes.func.isRequired,
 		onEnter: PropTypes.func,
 		onLeave: PropTypes.func,
+		rootMargin: PropTypes.string,
+		threshold: thresholdType,
 		innerRef: refType,
 	};
 
 	state = {
 		isIntersecting: false,
 		ref: (dom) => {
-			const { onEnter, onLeave, props: { innerRef } } = this;
-			forwardRef(innerRef, dom);
+			forwardRef(this.props.innerRef, dom);
 			this.dom = dom;
-			const intersection = new Intersection({ onEnter, onLeave });
-			if (dom) this.observer.observe(dom, intersection);
 		},
 	};
+
+	componentDidMount() {
+		const { onEnter, onLeave, dom, props: { rootMargin, threshold } } = this;
+		process.nextTick(() => {
+			const intersection = new Intersection({ onEnter, onLeave });
+			if (dom) {
+				const options = { rootMargin, threshold };
+				this.observer.observe(dom, intersection, options);
+			}
+		});
+	}
 
 	componentWillUnmount() {
 		const { dom } = this;

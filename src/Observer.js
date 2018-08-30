@@ -1,4 +1,5 @@
 import Map from './MapPolyfill';
+import warning from 'warning';
 
 if (!IntersectionObserver) {
 	throw new Error(
@@ -10,10 +11,14 @@ if (!IntersectionObserver) {
 	);
 }
 
+const createBox = (observer, intersection) => ({
+	observer,
+	intersection,
+});
+
 export default class Observer {
 	constructor() {
-		this.observer = null;
-		this.map = new Map();
+		this._boxes = new Map();
 		this.prevScrollTop = 0;
 		this.direction = 'down';
 	}
@@ -22,42 +27,45 @@ export default class Observer {
 		this.root = root;
 	}
 
-	create() {
-		const { root } = this;
-		const callback = (entries) =>
-			entries.forEach((entry) => {
-				const { target, isIntersecting } = entry;
-				const { direction, map } = this;
-				if (map.has(target)) {
-					const intersection = map.get(target);
-					const { isMounted } = intersection;
-					if (!isMounted) intersection.mount();
-					if (isIntersecting) intersection.onEnter(direction);
-					else if (isMounted) intersection.onLeave(direction);
-				}
-			});
-		this.observer = new IntersectionObserver(callback, { root });
-	}
-
-	removeObserver() {
-		if (this.observer) {
-			this.observer.disconnect();
-			this.observer = null;
+	observe(target, intersection, options) {
+		if (!this.root) {
+			return warning(
+				false,
+				'Should call observer.mount(root) before calling observer.observe()',
+			);
 		}
-	}
 
-	observe(target, intersection) {
-		if (intersection.isValid && !this.map.has(target)) {
-			this.map.set(target, intersection);
-			if (!this.observer) this.create();
-			this.observer.observe(target);
+		if (intersection.isValid && !this._boxes.has(target)) {
+			const callback = (entries) =>
+				entries.forEach((entry) => {
+					const { target, isIntersecting } = entry;
+					const { direction, _boxes } = this;
+					if (_boxes.has(target)) {
+						const { intersection } = _boxes.get(target);
+						const { isMounted } = intersection;
+						if (!isMounted) intersection.mount();
+						if (isIntersecting) intersection.onEnter(direction);
+						else if (isMounted) intersection.onLeave(direction);
+					}
+				});
+			const observer = new IntersectionObserver(callback, {
+				root: this.root,
+				...options,
+			});
+			const box = createBox(observer, intersection);
+			this._boxes.set(target, box);
+			observer.observe(target);
 		}
 	}
 
 	unobserve(target) {
-		this.map.delete(target);
-		this.observer.unobserve(target);
-		if (!this.map.size) this.removeObserver();
+		const box = this._boxes.get(target);
+		if (box) {
+			const { observer } = box;
+			observer.unobserve(target);
+			observer.disconnect();
+			this._boxes.delete(target);
+		}
 	}
 
 	updateDirection(ev) {

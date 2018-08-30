@@ -1,7 +1,8 @@
 import styles from './styles';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { isIOS, forwardRef, debounce, refType } from './util';
+import { isIOS, forwardRef, debounce } from './util';
+import { refType } from './PropTypes';
 import Observer from './Observer';
 import Intersection from './Intersection';
 import RefreshControl from './RefreshControl';
@@ -19,7 +20,7 @@ export default class ScrollView extends Component {
 		onTouchStart: PropTypes.func,
 		onTouchMove: PropTypes.func,
 		onTouchEnd: PropTypes.func,
-		endReachedThreshold: PropTypes.number,
+		// endReachedThreshold: PropTypes.number,
 		isHorizontal: PropTypes.bool,
 		innerRef: refType,
 		disabled: PropTypes.bool,
@@ -30,7 +31,7 @@ export default class ScrollView extends Component {
 	};
 
 	static defaultProps = {
-		endReachedThreshold: 0,
+		// endReachedThreshold: 0,
 		isHorizontal: false,
 		disabled: false,
 		isRefreshing: false,
@@ -225,15 +226,7 @@ export default class ScrollView extends Component {
 					)}
 					{children}
 					{isIOS && <div style={styles[direction].background} />}
-					{!isHorizontal && (
-						<div
-							ref={this.endRef}
-							style={{
-								top: -endReachedThreshold,
-								position: 'relative',
-							}}
-						/>
-					)}
+					{!isHorizontal && <div ref={this.endRef} />}
 				</div>
 			</ObserverContext.Provider>
 		);
