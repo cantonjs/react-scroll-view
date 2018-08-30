@@ -56,7 +56,6 @@ export default class Sticky extends Component {
 			);
 		}
 		else {
-			// const { left, width } = dom.getBoundingClientRect();
 			return (
 				<div
 					{...other}
@@ -66,6 +65,8 @@ export default class Sticky extends Component {
 						height,
 						position: 'absolute',
 						[status]: 0,
+						left: 0,
+						right: 0,
 					}}
 				>
 					{children}

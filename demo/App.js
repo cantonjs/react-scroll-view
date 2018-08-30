@@ -1,19 +1,21 @@
 import 'intersection-observer';
 import React, { Component } from 'react';
 import LazyElement from './LazyElement';
-import { ScrollView, StickySection, Sticky, Fixed } from '../src';
+import { ScrollView, StickySection, Sticky } from '../src';
 
 const styles = {
-	main: {
+	container: {
 		position: 'absolute',
 		width: '100%',
 		height: '100vh',
-		padding: 40,
 		margin: 0,
 		left: 0,
 		right: 0,
 		top: 0,
 		bottom: 0,
+	},
+	contentContainer: {
+		padding: 40,
 	},
 };
 
@@ -46,131 +48,148 @@ export default class App extends Component {
 		const { isRefreshing } = this.state;
 		return (
 			<ScrollView
-				style={styles.main}
+				style={styles.container}
+				contentContainerStyle={styles.contentContainer}
 				onScrollStart={this.handleScrollStart}
 				onScrollEnd={this.handleScrollEnd}
 				onEndReached={this.handleEndReached}
 				onRefresh={this.handleRefresh}
 				isRefreshing={isRefreshing}
 			>
-				<h1>React Scroll View</h1>
-				<p>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis id sem
-					venenatis ipsum venenatis fringilla vel ut ipsum. Vivamus iaculis
-					ullamcorper porttitor. In nec erat leo. Pellentesque habitant morbi
-					tristique senectus et netus et malesuada fames ac turpis egestas.
-					Suspendisse non erat id sapien gravida pellentesque nec nec lacus.
-					Pellentesque varius mauris erat, in molestie ex vestibulum ac.
-					Pellentesque sollicitudin nibh sit amet mauris molestie lacinia quis
-					non turpis. Phasellus tempor nibh a erat dignissim ultrices.
-					Suspendisse vulputate justo eros, eu convallis leo accumsan vel.
-					Aliquam placerat eleifend urna nec finibus. Ut in magna at tortor
-					viverra facilisis. Duis urna quam, pulvinar non eleifend eget, iaculis
-					blandit ante.
-				</p>
-				<p>
-					Donec odio elit, iaculis a tortor iaculis, facilisis molestie nibh.
-					Sed turpis felis, aliquet sit amet fermentum ac, consectetur a elit.
-					Maecenas nulla ex, egestas non erat vel, rhoncus mollis erat. Donec
-					tincidunt enim non turpis vehicula luctus. Nulla blandit massa arcu, a
-					aliquam est molestie vitae. Vestibulum tristique nibh cursus nisi
-					porttitor dapibus. Fusce ultricies neque at diam facilisis cursus.
-					Aliquam hendrerit quam arcu, ut cursus augue molestie aliquet. Nam
-					scelerisque lorem sed urna laoreet, vel malesuada quam ultricies. Cras
-					aliquet arcu eu tortor suscipit, eget dignissim turpis auctor.
-				</p>
-				<p>
-					Donec condimentum leo felis, ut efficitur nunc condimentum sed. Fusce
-					condimentum turpis vitae nunc vulputate viverra. Etiam eget pharetra
-					magna, non pharetra ligula. Vivamus in lacus sed ex gravida sagittis.
-					Morbi finibus, justo ut facilisis posuere, magna dui egestas lacus,
-					eget convallis nisl felis sit amet felis. Etiam sollicitudin sem eu
-					odio varius, in fermentum quam sollicitudin. Sed suscipit ante vel
-					nunc tristique consectetur. Morbi semper, leo ac rhoncus commodo, urna
-					magna semper ante, non pharetra ante lectus id felis. Nulla in cursus
-					quam. Pellentesque sed pretium lacus. Praesent libero diam, maximus
-					quis nulla a, fringilla rhoncus ipsum. Mauris tempus quis nisl id
-					feugiat. Aliquam erat volutpat. Cras cursus mollis augue in
-					condimentum. Nulla lectus nisi, mattis eu hendrerit quis, laoreet id
-					risus.
-				</p>
-				<p>
-					Orci varius natoque penatibus et magnis dis parturient montes,
-					nascetur ridiculus mus. Ut mollis hendrerit erat fermentum tristique.
-					Vivamus maximus vitae libero quis suscipit. Sed et neque rutrum,
-					facilisis tortor ac, sagittis felis. Morbi consequat tincidunt
-					placerat. Cras non magna nec purus dapibus ultricies vel non mi. Orci
-					varius natoque penatibus et magnis dis parturient montes, nascetur
-					ridiculus mus. Nam ultricies tempus viverra. Ut molestie eget orci
-					molestie fermentum. Morbi ac laoreet nunc. Maecenas a ipsum sed lectus
-					bibendum imperdiet in quis libero. Phasellus at risus tortor. Vivamus
-					ac velit non tellus commodo semper sed ac purus. Nam sed vestibulum
-					lacus. Sed eu mattis dui, in malesuada dolor. Quisque eleifend
-					consequat mi a mollis.
-				</p>
-				<p>
-					Ut dignissim, dui at fermentum rutrum, quam nisl mattis justo, in
-					imperdiet enim quam sit amet lectus. Donec varius ligula et nisl
-					imperdiet, id convallis enim posuere. Donec sit amet vulputate ligula,
-					eu tincidunt elit. Quisque ultrices imperdiet scelerisque. Proin
-					libero metus, facilisis vitae fermentum tincidunt, vehicula at augue.
-					Sed ut massa id purus blandit faucibus volutpat ultricies eros.
-					Aliquam faucibus efficitur nulla, tincidunt ultrices magna blandit
-					vel. Nullam pulvinar gravida lorem a pharetra. Curabitur sollicitudin
-					maximus elit, eget rutrum nisl ullamcorper a. Maecenas suscipit
-					elementum turpis in pellentesque. Nunc dui enim, aliquam eget lacinia
-					non, dapibus ut ex. Morbi sit amet condimentum odio. Mauris vel cursus
-					lorem.
-				</p>
-				<p>
-					Pellentesque tempus, dui ac ultricies elementum, neque ligula faucibus
-					nulla, non blandit arcu nisi id arcu. Sed volutpat lorem a nulla
-					gravida vehicula. Etiam quis semper arcu. Sed felis dolor, interdum
-					vel purus eu, aliquet interdum erat. In convallis nulla nibh, porta
-					tincidunt nibh vulputate eu. Nullam consectetur tristique tempor.
-					Mauris id tristique neque. Donec vitae metus at ipsum bibendum varius.
-					Ut tincidunt lacus a ligula faucibus, in rutrum orci suscipit. Aenean
-					nec consequat sem, et tempor augue.
-				</p>
-				<p>
-					Maecenas pellentesque nunc sapien, a interdum nisl ultrices in. Donec
-					non facilisis eros. Morbi et felis quis neque aliquam rhoncus. Etiam
-					ut facilisis enim, eu vestibulum eros. Sed aliquam libero nec magna
-					interdum, sit amet ullamcorper lacus rhoncus. Curabitur quam lorem,
-					eleifend vel viverra nec, sodales at urna. Morbi lacus turpis,
-					volutpat vitae volutpat eget, egestas in risus. Donec magna metus,
-					suscipit a posuere a, pulvinar vestibulum tortor. Vestibulum ante
-					ipsum primis in faucibus orci luctus et ultrices posuere cubilia
-					Curae; Nam cursus felis purus, vel pulvinar lorem tincidunt quis.
-					Pellentesque vehicula vehicula metus, eget auctor lectus auctor id.
-					Etiam sed efficitur tortor.
-				</p>
-				<p>
-					Aliquam non ex vel leo pretium scelerisque in nec purus. Vivamus vel
-					nunc massa. Proin at lorem eu risus convallis rhoncus a eu ipsum. Cras
-					eleifend eget enim nec molestie. Praesent feugiat erat ut est maximus
-					gravida. Curabitur sed nibh id sem laoreet rhoncus non in augue. Donec
-					ultricies magna ut vestibulum luctus. Vestibulum auctor elementum
-					ligula non congue. Proin interdum malesuada mi vel sollicitudin.
-					Vestibulum finibus bibendum massa in feugiat. Suspendisse vulputate
-					neque eget turpis aliquam, ac cursus nibh convallis. Sed ultricies
-					vulputate nisi eget ullamcorper. Vivamus sagittis augue orci, eu
-					condimentum augue malesuada pretium. Nulla tempor consectetur tortor
-					eget eleifend. Nam non mollis nulla. Vestibulum laoreet lectus est, id
-					mattis turpis tincidunt sollicitudin.
-				</p>
-				<p>
-					Morbi venenatis id quam vel condimentum. Maecenas euismod eu ex a
-					efficitur. Ut varius mollis dui, nec ornare sem porta sed. Proin et
-					neque id orci pulvinar consequat. Nullam et velit nunc. Class aptent
-					taciti sociosqu ad litora torquent per conubia nostra, per inceptos
-					himenaeos. Nulla feugiat, sapien sit amet tincidunt lobortis, diam
-					mauris fermentum diam, sed volutpat lacus justo ut metus. Suspendisse
-					porttitor eros id eros cursus, vel venenatis est aliquam.
-				</p>
+				<StickySection>
+					<Sticky height={88}>
+						<h1>React Scroll View</h1>
+					</Sticky>
+					<p>
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis id sem
+						venenatis ipsum venenatis fringilla vel ut ipsum. Vivamus iaculis
+						ullamcorper porttitor. In nec erat leo. Pellentesque habitant morbi
+						tristique senectus et netus et malesuada fames ac turpis egestas.
+						Suspendisse non erat id sapien gravida pellentesque nec nec lacus.
+						Pellentesque varius mauris erat, in molestie ex vestibulum ac.
+						Pellentesque sollicitudin nibh sit amet mauris molestie lacinia quis
+						non turpis. Phasellus tempor nibh a erat dignissim ultrices.
+						Suspendisse vulputate justo eros, eu convallis leo accumsan vel.
+						Aliquam placerat eleifend urna nec finibus. Ut in magna at tortor
+						viverra facilisis. Duis urna quam, pulvinar non eleifend eget,
+						iaculis blandit ante.
+					</p>
+					<p>
+						Donec odio elit, iaculis a tortor iaculis, facilisis molestie nibh.
+						Sed turpis felis, aliquet sit amet fermentum ac, consectetur a elit.
+						Maecenas nulla ex, egestas non erat vel, rhoncus mollis erat. Donec
+						tincidunt enim non turpis vehicula luctus. Nulla blandit massa arcu,
+						a aliquam est molestie vitae. Vestibulum tristique nibh cursus nisi
+						porttitor dapibus. Fusce ultricies neque at diam facilisis cursus.
+						Aliquam hendrerit quam arcu, ut cursus augue molestie aliquet. Nam
+						scelerisque lorem sed urna laoreet, vel malesuada quam ultricies.
+						Cras aliquet arcu eu tortor suscipit, eget dignissim turpis auctor.
+					</p>
+					<p>
+						Donec condimentum leo felis, ut efficitur nunc condimentum sed.
+						Fusce condimentum turpis vitae nunc vulputate viverra. Etiam eget
+						pharetra magna, non pharetra ligula. Vivamus in lacus sed ex gravida
+						sagittis. Morbi finibus, justo ut facilisis posuere, magna dui
+						egestas lacus, eget convallis nisl felis sit amet felis. Etiam
+						sollicitudin sem eu odio varius, in fermentum quam sollicitudin. Sed
+						suscipit ante vel nunc tristique consectetur. Morbi semper, leo ac
+						rhoncus commodo, urna magna semper ante, non pharetra ante lectus id
+						felis. Nulla in cursus quam. Pellentesque sed pretium lacus.
+						Praesent libero diam, maximus quis nulla a, fringilla rhoncus ipsum.
+						Mauris tempus quis nisl id feugiat. Aliquam erat volutpat. Cras
+						cursus mollis augue in condimentum. Nulla lectus nisi, mattis eu
+						hendrerit quis, laoreet id risus.
+					</p>
+				</StickySection>
+				<StickySection>
+					<Sticky height={88}>
+						<h1>Ut mollis hendrerit erat fermentum tristique.</h1>
+					</Sticky>
+					<p>
+						Orci varius natoque penatibus et magnis dis parturient montes,
+						nascetur ridiculus mus. Vivamus maximus vitae libero quis suscipit.
+						Sed et neque rutrum, facilisis tortor ac, sagittis felis. Morbi
+						consequat tincidunt placerat. Cras non magna nec purus dapibus
+						ultricies vel non mi. Orci varius natoque penatibus et magnis dis
+						parturient montes, nascetur ridiculus mus. Nam ultricies tempus
+						viverra. Ut molestie eget orci molestie fermentum. Morbi ac laoreet
+						nunc. Maecenas a ipsum sed lectus bibendum imperdiet in quis libero.
+						Phasellus at risus tortor. Vivamus ac velit non tellus commodo
+						semper sed ac purus. Nam sed vestibulum lacus. Sed eu mattis dui, in
+						malesuada dolor. Quisque eleifend consequat mi a mollis.
+					</p>
+					<p>
+						Ut dignissim, dui at fermentum rutrum, quam nisl mattis justo, in
+						imperdiet enim quam sit amet lectus. Donec varius ligula et nisl
+						imperdiet, id convallis enim posuere. Donec sit amet vulputate
+						ligula, eu tincidunt elit. Quisque ultrices imperdiet scelerisque.
+						Proin libero metus, facilisis vitae fermentum tincidunt, vehicula at
+						augue. Sed ut massa id purus blandit faucibus volutpat ultricies
+						eros. Aliquam faucibus efficitur nulla, tincidunt ultrices magna
+						blandit vel. Nullam pulvinar gravida lorem a pharetra. Curabitur
+						sollicitudin maximus elit, eget rutrum nisl ullamcorper a. Maecenas
+						suscipit elementum turpis in pellentesque. Nunc dui enim, aliquam
+						eget lacinia non, dapibus ut ex. Morbi sit amet condimentum odio.
+						Mauris vel cursus lorem.
+					</p>
+					<p>
+						Pellentesque tempus, dui ac ultricies elementum, neque ligula
+						faucibus nulla, non blandit arcu nisi id arcu. Sed volutpat lorem a
+						nulla gravida vehicula. Etiam quis semper arcu. Sed felis dolor,
+						interdum vel purus eu, aliquet interdum erat. In convallis nulla
+						nibh, porta tincidunt nibh vulputate eu. Nullam consectetur
+						tristique tempor. Mauris id tristique neque. Donec vitae metus at
+						ipsum bibendum varius. Ut tincidunt lacus a ligula faucibus, in
+						rutrum orci suscipit. Aenean nec consequat sem, et tempor augue.
+					</p>
+				</StickySection>
+				<StickySection>
+					<Sticky height={88}>
+						<h1>
+							Maecenas pellentesque nunc sapien, a interdum nisl ultrices in.
+						</h1>
+					</Sticky>
+					<p>
+						Donec non facilisis eros. Morbi et felis quis neque aliquam rhoncus.
+						Etiam ut facilisis enim, eu vestibulum eros. Sed aliquam libero nec
+						magna interdum, sit amet ullamcorper lacus rhoncus. Curabitur quam
+						lorem, eleifend vel viverra nec, sodales at urna. Morbi lacus
+						turpis, volutpat vitae volutpat eget, egestas in risus. Donec magna
+						metus, suscipit a posuere a, pulvinar vestibulum tortor. Vestibulum
+						ante ipsum primis in faucibus orci luctus et ultrices posuere
+						cubilia Curae; Nam cursus felis purus, vel pulvinar lorem tincidunt
+						quis. Pellentesque vehicula vehicula metus, eget auctor lectus
+						auctor id. Etiam sed efficitur tortor.
+					</p>
+					<p>
+						Aliquam non ex vel leo pretium scelerisque in nec purus. Vivamus vel
+						nunc massa. Proin at lorem eu risus convallis rhoncus a eu ipsum.
+						Cras eleifend eget enim nec molestie. Praesent feugiat erat ut est
+						maximus gravida. Curabitur sed nibh id sem laoreet rhoncus non in
+						augue. Donec ultricies magna ut vestibulum luctus. Vestibulum auctor
+						elementum ligula non congue. Proin interdum malesuada mi vel
+						sollicitudin. Vestibulum finibus bibendum massa in feugiat.
+						Suspendisse vulputate neque eget turpis aliquam, ac cursus nibh
+						convallis. Sed ultricies vulputate nisi eget ullamcorper. Vivamus
+						sagittis augue orci, eu condimentum augue malesuada pretium. Nulla
+						tempor consectetur tortor eget eleifend. Nam non mollis nulla.
+						Vestibulum laoreet lectus est, id mattis turpis tincidunt
+						sollicitudin.
+					</p>
+					<p>
+						Morbi venenatis id quam vel condimentum. Maecenas euismod eu ex a
+						efficitur. Ut varius mollis dui, nec ornare sem porta sed. Proin et
+						neque id orci pulvinar consequat. Nullam et velit nunc. Class aptent
+						taciti sociosqu ad litora torquent per conubia nostra, per inceptos
+						himenaeos. Nulla feugiat, sapien sit amet tincidunt lobortis, diam
+						mauris fermentum diam, sed volutpat lacus justo ut metus.
+						Suspendisse porttitor eros id eros cursus, vel venenatis est
+						aliquam.
+					</p>
+				</StickySection>
 				<StickySection style={{ height: 500, background: '#f4f4f4' }}>
 					<Sticky style={{ background: 'gray' }} height={44}>
-						<h2 style={{ margin: 0 }}>Stickies...</h2>
+						<h1 style={{ margin: 0 }}>Stickies...</h1>
 					</Sticky>
 					<p>list 1</p>
 					<p>list 2</p>
@@ -228,7 +247,7 @@ export default class App extends Component {
 					viverra.
 				</p>
 				<LazyElement>
-					<h2>Lazy</h2>
+					<h1>Lazy</h1>
 				</LazyElement>
 				<p>
 					In bibendum cursus erat, molestie varius nibh varius sed. Donec orci

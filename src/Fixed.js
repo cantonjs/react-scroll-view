@@ -25,12 +25,8 @@ export default class Fixed extends Component {
 		}
 	}
 
-	saveFixedContext(fixedContext) {
-		this.fixedContext = fixedContext;
-	}
-
 	renderChildren = (fixedContext) => {
-		this.saveFixedContext(fixedContext);
+		this.fixedContext = fixedContext;
 		return null;
 	};
 

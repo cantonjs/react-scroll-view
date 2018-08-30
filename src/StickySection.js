@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import { StickyContext } from './Contexts';
 import ScrollObserver from './ScrollObserver';
 
-const threshold = [0, 1];
-
 export default class StickySection extends Component {
 	static propTypes = {
 		children: PropTypes.node,
@@ -18,36 +16,6 @@ export default class StickySection extends Component {
 		setSticky: (sticky) => {
 			this.setState({ sticky });
 		},
-	};
-
-	handleIntersect = (entry) => {
-		const { isIntersecting, boundingClientRect, intersectionRect } = entry;
-		const { state } = this;
-		console.log('isIntersecting', isIntersecting, this.state.isIntersecting);
-		const newState = {};
-		if (isIntersecting !== state.isIntersecting) {
-			newState.isIntersecting = isIntersecting;
-			if (isIntersecting) {
-				if (
-					boundingClientRect.top === intersectionRect.top &&
-					state.isIntersecting !== 'top'
-				) {
-					newState.status = 'top';
-				}
-			}
-		}
-		if (
-			boundingClientRect.top < intersectionRect.top &&
-			state.isIntersecting !== 'fixed'
-		) {
-			newState.status = 'fixed';
-		}
-		else if (state.isIntersecting !== 'top') {
-			newState.status = 'top';
-		}
-		if (Object.keys(newState).length) {
-			this.setState(newState);
-		}
 	};
 
 	handleTopEnter = (direction) => {
@@ -88,15 +56,12 @@ export default class StickySection extends Component {
 	};
 
 	render() {
-		const {
-			props: { children, style, ...other },
-			state: { sticky, status },
-		} = this;
+		const { props: { children, style, ...other }, state: { sticky } } = this;
 		const stickyHeight = sticky.height || 0;
 		return (
 			<StickyContext.Provider value={this.state}>
 				<div {...other} style={{ position: 'relative', ...style }}>
-					{status !== 'top' && <div style={sticky} />}
+					<div style={sticky} />
 					<ScrollObserver
 						onLeave={this.handleTopLeave}
 						onEnter={this.handleTopEnter}
