@@ -1,5 +1,8 @@
 # react-scroll-view [WIP]
 
+[![CircleCI](https://circleci.com/gh/cantonjs/react-scroll-view.svg?style=shield)](https://circleci.com/gh/cantonjs/react-scroll-view)
+[![Build Status](https://travis-ci.org/cantonjs/react-scroll-view.svg?branch=master)](https://travis-ci.org/cantonjs/react-scroll-view)
+
 React scroll component
 
 - [Features](#features)
