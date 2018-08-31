@@ -15,17 +15,19 @@ describe('ScrollView component', () => {
 
 	test('should `overflowY` be `auto`', () => {
 		const wrapper = mount(<ScrollView />);
-		expect(wrapper.getDOMNode().style.overflowY).toBe('auto');
+		expect(wrapper.getDOMNode().firstElementChild.style.overflowY).toBe('auto');
 	});
 
 	test('should `disabled` work', () => {
 		const wrapper = mount(<ScrollView disabled />);
-		expect(wrapper.getDOMNode().style.overflowY).toBe('hidden');
+		expect(wrapper.getDOMNode().firstElementChild.style.overflowY).toBe(
+			'hidden',
+		);
 	});
 
 	test('should `isHorizontal` work', () => {
 		const wrapper = mount(<ScrollView isHorizontal />);
-		expect(wrapper.getDOMNode().style.overflowX).toBe('auto');
+		expect(wrapper.getDOMNode().firstElementChild.style.overflowX).toBe('auto');
 	});
 
 	test('should `onScroll` work', () => {
