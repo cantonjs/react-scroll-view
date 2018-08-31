@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { isIOS, forwardRef, debounce } from './util';
 import { refType } from './PropTypes';
 import Observer from './Observer';
-import Fragment from './Fragment';
 import Intersection from './Intersection';
 import RefreshControl from './RefreshControl';
 import { ObserverContext, FixedContext } from './Contexts';
@@ -197,7 +196,7 @@ export default class ScrollView extends Component {
 		}
 	};
 
-	renderChildren = (parentFixedContext) => {
+	render() {
 		const {
 			props: {
 				style,
@@ -229,11 +228,16 @@ export default class ScrollView extends Component {
 		}
 		return (
 			<ObserverContext.Provider value={observer}>
-				<FixedContext.Provider value={parentFixedContext || fixedContext}>
-					<Fragment>
-						{!parentFixedContext && (
-							<div style={styles.fixedContainer}>{fixedChildren}</div>
-						)}
+				<FixedContext.Provider value={fixedContext}>
+					<div style={styles.container}>
+						<div
+							style={{
+								...contentContainerStyle,
+								...styles.fixedContainer,
+							}}
+						>
+							{fixedChildren}
+						</div>
 						<div
 							{...other}
 							style={styled}
@@ -261,13 +265,9 @@ export default class ScrollView extends Component {
 							{isIOS && <div style={styles[direction].background} />}
 							{!isHorizontal && <div ref={this.endRef} />}
 						</div>
-					</Fragment>
+					</div>
 				</FixedContext.Provider>
 			</ObserverContext.Provider>
 		);
-	};
-
-	render() {
-		return <FixedContext.Consumer>{this.renderChildren}</FixedContext.Consumer>;
 	}
 }
