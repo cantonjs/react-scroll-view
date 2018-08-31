@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { isIOS, forwardRef, debounce } from './util';
 import { refType } from './PropTypes';
 import Observer from './Observer';
-import Intersection from './Intersection';
+import Hook from './Hook';
 import RefreshControl from './RefreshControl';
 import { ObserverContext, FixedContext } from './Contexts';
 import warning from 'warning';
@@ -22,7 +22,7 @@ export default class ScrollView extends Component {
 		onTouchStart: PropTypes.func,
 		onTouchMove: PropTypes.func,
 		onTouchEnd: PropTypes.func,
-		// endReachedThreshold: PropTypes.number,
+		endReachedThreshold: PropTypes.number,
 		isHorizontal: PropTypes.bool,
 		innerRef: refType,
 		disabled: PropTypes.bool,
@@ -33,7 +33,7 @@ export default class ScrollView extends Component {
 	};
 
 	static defaultProps = {
-		// endReachedThreshold: 0,
+		endReachedThreshold: 0,
 		isHorizontal: false,
 		disabled: false,
 		isRefreshing: false,
@@ -82,15 +82,10 @@ export default class ScrollView extends Component {
 	componentDidMount() {
 		const { dom } = this;
 		this.observer.mount(dom);
-		this.observeEndReached();
 	}
 
 	componentDidUpdate(prevProps) {
-		const { onEndReached, isRefreshing } = this.props;
-		if (onEndReached !== prevProps.onEndReached) {
-			if (onEndReached) this.observeEndReached();
-			else this.unobserveEndReached();
-		}
+		const { isRefreshing } = this.props;
 		if (prevProps.isRefreshing && !isRefreshing) {
 			const { refreshControl } = this;
 			if (refreshControl) {
@@ -111,26 +106,14 @@ export default class ScrollView extends Component {
 		this.dom = dom;
 	};
 
-	endRef = (dom) => {
-		this.end = dom;
-	};
-
 	refreshControlRef = (refreshControl) => {
 		this.refreshControl = refreshControl;
 	};
 
-	observeEndReached() {
-		const { end, props: { onEndReached } } = this;
-		if (end && onEndReached) {
-			const intersection = new Intersection({ onEnter: onEndReached });
-			this.observer.observe(end, intersection);
-		}
-	}
-
-	unobserveEndReached() {
-		const { end } = this;
-		if (end) this.observer.unobserve(end);
-	}
+	handleEndEnter = (direction) => {
+		const { onEndReached } = this.props;
+		if (direction === 'down' && onEndReached) onEndReached();
+	};
 
 	handleScroll = (ev) => {
 		const { props: { onScrollStart, onScroll }, isScrolling } = this;
@@ -206,7 +189,7 @@ export default class ScrollView extends Component {
 				onScrollStart,
 				onScrollEnd,
 				onEndReached,
-				// endReachedThreshold,
+				endReachedThreshold,
 				isHorizontal,
 				onRefresh,
 				disabled,
@@ -263,7 +246,15 @@ export default class ScrollView extends Component {
 								{children}
 							</div>
 							{isIOS && <div style={styles[direction].background} />}
-							{!isHorizontal && <div ref={this.endRef} />}
+							{!isHorizontal && (
+								<Hook
+									style={{
+										position: 'relative',
+										bottom: endReachedThreshold,
+									}}
+									onEnter={this.handleEndEnter}
+								/>
+							)}
 						</div>
 					</div>
 				</FixedContext.Provider>

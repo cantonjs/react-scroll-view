@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StickyContext } from './Contexts';
-import ScrollObserver from './ScrollObserver';
+import Hook from './Hook';
 
 export default class StickySection extends Component {
 	static propTypes = {
@@ -42,19 +42,6 @@ export default class StickySection extends Component {
 		}
 	};
 
-	renderChildren = ({ ref }) => {
-		const {
-			props: { children, style, ...other },
-			state: { stickyStyle, status },
-		} = this;
-		return (
-			<div {...other} ref={ref} style={{ position: 'relative', ...style }}>
-				{status !== 'top' && <div style={stickyStyle} />}
-				{children}
-			</div>
-		);
-	};
-
 	render() {
 		const {
 			props: { children, style, ...other },
@@ -65,26 +52,23 @@ export default class StickySection extends Component {
 			<StickyContext.Provider value={this.state}>
 				<div {...other} style={{ position: 'relative', ...style }}>
 					<div style={stickyStyle} />
-					<ScrollObserver
-						onLeave={this.handleTopLeave}
+					<Hook
 						onEnter={this.handleTopEnter}
-					>
-						{({ ref }) => (
-							<div ref={ref} style={{ position: 'absolute', top: 0 }} />
-						)}
-					</ScrollObserver>
+						onLeave={this.handleTopLeave}
+						style={{
+							position: 'absolute',
+							top: 0,
+						}}
+					/>
 					{children}
-					<ScrollObserver
-						onLeave={this.handleBottomLeave}
+					<Hook
 						onEnter={this.handleBottomEnter}
-					>
-						{({ ref }) => (
-							<div
-								ref={ref}
-								style={{ position: 'absolute', bottom: stickyHeight }}
-							/>
-						)}
-					</ScrollObserver>
+						onLeave={this.handleBottomLeave}
+						style={{
+							position: 'absolute',
+							bottom: stickyHeight,
+						}}
+					/>
 				</div>
 			</StickyContext.Provider>
 		);
