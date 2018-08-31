@@ -89,7 +89,7 @@ const styles = {
 		position: 'absolute',
 		top: 0,
 	},
-	stickySectionBottomHook: memoize((bottom) => ({
+	stickySectionBottomHook: memoize((bottom = 0) => ({
 		position: 'absolute',
 		bottom,
 	})),
@@ -107,6 +107,7 @@ const styles = {
 	},
 	stickyRelative: memoize((topOrBottom) => ({
 		position: 'absolute',
+		zIndex: 1,
 		left: 0,
 		right: 0,
 		[topOrBottom]: 0,

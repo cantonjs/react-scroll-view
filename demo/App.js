@@ -67,10 +67,9 @@ export default class App extends Component {
 				onRefresh={this.handleRefresh}
 				isRefreshing={isRefreshing}
 			>
-				<StickySection>
-					<Sticky>
-						<h1 style={styles.sticky}>React Scroll View</h1>
-					</Sticky>
+				<StickySection
+					sticky={<h1 style={styles.sticky}>React Scroll View</h1>}
+				>
 					<p>
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis id sem
 						venenatis ipsum venenatis fringilla vel ut ipsum. Vivamus iaculis
@@ -112,12 +111,13 @@ export default class App extends Component {
 						hendrerit quis, laoreet id risus.
 					</p>
 				</StickySection>
-				<StickySection>
-					<Sticky>
+				<StickySection
+					sticky={
 						<h1 style={styles.sticky}>
 							Ut mollis hendrerit erat fermentum tristique.
 						</h1>
-					</Sticky>
+					}
+				>
 					<p>
 						Orci varius natoque penatibus et magnis dis parturient montes,
 						nascetur ridiculus mus. Vivamus maximus vitae libero quis suscipit.
@@ -156,12 +156,7 @@ export default class App extends Component {
 						rutrum orci suscipit. Aenean nec consequat sem, et tempor augue.
 					</p>
 				</StickySection>
-				<StickySection>
-					<Sticky>
-						<h1 style={styles.sticky}>
-							Maecenas pellentesque nunc sapien, a interdum nisl ultrices in.
-						</h1>
-					</Sticky>
+				<StickySection sticky={<h1 style={styles.sticky}>Maecenas nunc.</h1>}>
 					<p>
 						Donec non facilisis eros. Morbi et felis quis neque aliquam rhoncus.
 						Etiam ut facilisis enim, eu vestibulum eros. Sed aliquam libero nec
@@ -199,200 +194,143 @@ export default class App extends Component {
 						Suspendisse porttitor eros id eros cursus, vel venenatis est
 						aliquam.
 					</p>
+
+					<ScrollView style={{ height: 400 }}>
+						<StickySection sticky={<p style={styles.alpha}>A</p>}>
+							<ul>
+								<li>Adelia Pisano</li>
+								<li>Alayna Loredo</li>
+								<li>Arnold Roselli</li>
+								<li>Ashlee Dollar</li>
+							</ul>
+						</StickySection>
+						<StickySection sticky={<p style={styles.alpha}>B</p>}>
+							<ul>
+								<li>Brant Hunsberger</li>
+							</ul>
+						</StickySection>
+						<StickySection sticky={<p style={styles.alpha}>C</p>}>
+							<ul>
+								<li>Carl Wetzler</li>
+								<li>Cherry Greeno</li>
+								<li>Cris Kepley</li>
+								<li>Cyril Mikula</li>
+							</ul>
+						</StickySection>
+						<StickySection sticky={<p style={styles.alpha}>D</p>}>
+							<ul>
+								<li>Diedre Zell</li>
+								<li>Dino Grindstaff</li>
+								<li>Dusty Desantiago</li>
+							</ul>
+						</StickySection>
+						<StickySection sticky={<p style={styles.alpha}>E</p>}>
+							<ul>
+								<li>Ebony Lafave</li>
+								<li>Ela Eubanks</li>
+								<li>Eliseo Yeomans</li>
+							</ul>
+						</StickySection>
+						<StickySection sticky={<p style={styles.alpha}>F</p>}>
+							<ul>
+								<li>Freddy Nghiem</li>
+							</ul>
+						</StickySection>
+						<StickySection sticky={<p style={styles.alpha}>G</p>}>
+							<ul>
+								<li>Gia Ishikawa</li>
+								<li>Grover Castruita</li>
+								<li>Gus Riles</li>
+							</ul>
+						</StickySection>
+						<StickySection sticky={<p style={styles.alpha}>H</p>}>
+							<ul>
+								<li>Herma Fomby</li>
+							</ul>
+						</StickySection>
+						<StickySection sticky={<p style={styles.alpha}>I</p>}>
+							<ul>
+								<li>Ignacia Kincheloe</li>
+								<li>Inell Ellison</li>
+								<li>Isis Wehr</li>
+							</ul>
+						</StickySection>
+						<StickySection sticky={<p style={styles.alpha}>J</p>}>
+							<ul>
+								<li>Jacquetta Eugene</li>
+								<li>Jammie Coby</li>
+							</ul>
+						</StickySection>
+						<StickySection sticky={<p style={styles.alpha}>K</p>}>
+							<ul>
+								<li>Kirk Dudgeon</li>
+							</ul>
+						</StickySection>
+						<StickySection sticky={<p style={styles.alpha}>L</p>}>
+							<ul>
+								<li>Lamar Trusty</li>
+								<li>Larisa Yearwood</li>
+								<li>Lawanna Vanauken</li>
+								<li>Leora Mcbeath</li>
+								<li>Lyndon Goggin</li>
+							</ul>
+						</StickySection>
+						<StickySection sticky={<p style={styles.alpha}>M</p>}>
+							<ul>
+								<li>Madelyn Covell</li>
+								<li>Margarita Janson</li>
+								<li>Marvis Dragoo</li>
+								<li>May Bedgood</li>
+								<li>Maynard Curling</li>
+								<li>Melonie Tison</li>
+								<li>Michell Fairfield</li>
+								<li>Mirna Stiger</li>
+							</ul>
+						</StickySection>
+						<StickySection sticky={<p style={styles.alpha}>N</p>}>
+							<ul>
+								<li>Nereida Rappaport</li>
+							</ul>
+						</StickySection>
+						<StickySection sticky={<p style={styles.alpha}>P</p>}>
+							<ul>
+								<li>Pete Smale</li>
+							</ul>
+						</StickySection>
+						<StickySection sticky={<p style={styles.alpha}>R</p>}>
+							<ul>
+								<li>Rosana Mullikin</li>
+							</ul>
+						</StickySection>
+						<StickySection sticky={<p style={styles.alpha}>S</p>}>
+							<ul>
+								<li>Selina Burrow</li>
+								<li>Silva Wilcox</li>
+								<li>Soledad Nolin</li>
+								<li>Sonia Bettcher</li>
+								<li>Sumiko Slonaker</li>
+								<li>Suzanne Ivey</li>
+							</ul>
+						</StickySection>
+						<StickySection sticky={<p style={styles.alpha}>V</p>}>
+							<ul>
+								<li>Victor Bolinger</li>
+							</ul>
+						</StickySection>
+						<StickySection sticky={<p style={styles.alpha}>W</p>}>
+							<ul>
+								<li>Wanetta Steinmetz</li>
+							</ul>
+						</StickySection>
+					</ScrollView>
 				</StickySection>
-
-				<ScrollView style={{ height: 400 }}>
-					<StickySection>
-						<Sticky>
-							<p style={styles.alpha}>A</p>
-						</Sticky>
-						<ul>
-							<li>Adelia Pisano</li>
-							<li>Alayna Loredo</li>
-							<li>Arnold Roselli</li>
-							<li>Ashlee Dollar</li>
-						</ul>
-					</StickySection>
-					<StickySection>
-						<Sticky>
-							<p style={styles.alpha}>B</p>
-						</Sticky>
-						<ul>
-							<li>Brant Hunsberger</li>
-						</ul>
-					</StickySection>
-					<StickySection>
-						<Sticky>
-							<p style={styles.alpha}>C</p>
-						</Sticky>
-						<ul>
-							<li>Carl Wetzler</li>
-							<li>Cherry Greeno</li>
-							<li>Cris Kepley</li>
-							<li>Cyril Mikula</li>
-						</ul>
-					</StickySection>
-					<StickySection>
-						<Sticky>
-							<p style={styles.alpha}>D</p>
-						</Sticky>
-						<ul>
-							<li>Diedre Zell</li>
-							<li>Dino Grindstaff</li>
-							<li>Dusty Desantiago</li>
-						</ul>
-					</StickySection>
-					<StickySection>
-						<Sticky>
-							<p style={styles.alpha}>E</p>
-						</Sticky>
-						<ul>
-							<li>Ebony Lafave</li>
-							<li>Ela Eubanks</li>
-							<li>Eliseo Yeomans</li>
-						</ul>
-					</StickySection>
-					<StickySection>
-						<Sticky>
-							<p style={styles.alpha}>F</p>
-						</Sticky>
-						<ul>
-							<li>Freddy Nghiem</li>
-						</ul>
-					</StickySection>
-					<StickySection>
-						<Sticky>
-							<p style={styles.alpha}>G</p>
-						</Sticky>
-						<ul>
-							<li>Gia Ishikawa</li>
-							<li>Grover Castruita</li>
-							<li>Gus Riles</li>
-						</ul>
-					</StickySection>
-					<StickySection>
-						<Sticky>
-							<p style={styles.alpha}>H</p>
-						</Sticky>
-						<ul>
-							<li>Herma Fomby</li>
-						</ul>
-					</StickySection>
-					<StickySection>
-						<Sticky>
-							<p style={styles.alpha}>I</p>
-						</Sticky>
-						<ul>
-							<li>Ignacia Kincheloe</li>
-							<li>Inell Ellison</li>
-							<li>Isis Wehr</li>
-						</ul>
-					</StickySection>
-					<StickySection>
-						<Sticky>
-							<p style={styles.alpha}>J</p>
-						</Sticky>
-						<ul>
-							<li>Jacquetta Eugene</li>
-							<li>Jammie Coby</li>
-						</ul>
-					</StickySection>
-					<StickySection>
-						<Sticky>
-							<p style={styles.alpha}>K</p>
-						</Sticky>
-						<ul>
-							<li>Kirk Dudgeon</li>
-						</ul>
-					</StickySection>
-					<StickySection>
-						<Sticky>
-							<p style={styles.alpha}>L</p>
-						</Sticky>
-						<ul>
-							<li>Lamar Trusty</li>
-							<li>Larisa Yearwood</li>
-							<li>Lawanna Vanauken</li>
-							<li>Leora Mcbeath</li>
-							<li>Lyndon Goggin</li>
-						</ul>
-					</StickySection>
-					<StickySection>
-						<Sticky>
-							<p style={styles.alpha}>M</p>
-						</Sticky>
-						<ul>
-							<li>Madelyn Covell</li>
-							<li>Margarita Janson</li>
-							<li>Marvis Dragoo</li>
-							<li>May Bedgood</li>
-							<li>Maynard Curling</li>
-							<li>Melonie Tison</li>
-							<li>Michell Fairfield</li>
-							<li>Mirna Stiger</li>
-						</ul>
-					</StickySection>
-					<StickySection>
-						<Sticky>
-							<p style={styles.alpha}>N</p>
-						</Sticky>
-						<ul>
-							<li>Nereida Rappaport</li>
-						</ul>
-					</StickySection>
-					<StickySection>
-						<Sticky>
-							<p style={styles.alpha}>P</p>
-						</Sticky>
-						<ul>
-							<li>Pete Smale</li>
-						</ul>
-					</StickySection>
-					<StickySection>
-						<Sticky>
-							<p style={styles.alpha}>R</p>
-						</Sticky>
-						<ul>
-							<li>Rosana Mullikin</li>
-						</ul>
-					</StickySection>
-					<StickySection>
-						<Sticky>
-							<p style={styles.alpha}>S</p>
-						</Sticky>
-						<ul>
-							<li>Selina Burrow</li>
-							<li>Silva Wilcox</li>
-							<li>Soledad Nolin</li>
-							<li>Sonia Bettcher</li>
-							<li>Sumiko Slonaker</li>
-							<li>Suzanne Ivey</li>
-						</ul>
-					</StickySection>
-					<StickySection>
-						<Sticky>
-							<p style={styles.alpha}>V</p>
-						</Sticky>
-						<ul>
-							<li>Victor Bolinger</li>
-						</ul>
-					</StickySection>
-					<StickySection>
-						<Sticky>
-							<p style={styles.alpha}>W</p>
-						</Sticky>
-						<ul>
-							<li>Wanetta Steinmetz</li>
-						</ul>
-					</StickySection>
-				</ScrollView>
-
-				<StickySection>
-					<Sticky>
+				<StickySection
+					sticky={
 						<h1 style={styles.sticky}>
 							Etiam maximus ultrices purus eget eleifend.
 						</h1>
-					</Sticky>
+					}
+				>
 					<p>
 						Vestibulum nec quam rhoncus libero elementum volutpat. Morbi id
 						ligula eget lectus tristique rutrum. Vestibulum ac consequat nulla.

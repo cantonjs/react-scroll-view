@@ -208,9 +208,6 @@ export default class ScrollView extends Component {
 			<ObserverContext.Provider value={observer}>
 				<FixedContext.Provider value={fixedContext}>
 					<div style={styles.container}>
-						<div style={styles.fixedContainer(contentContainerStyle)}>
-							{fixedChildren}
-						</div>
 						<div
 							{...other}
 							style={mainStyle}
@@ -242,6 +239,9 @@ export default class ScrollView extends Component {
 									onEnter={this.handleEndEnter}
 								/>
 							)}
+						</div>
+						<div style={styles.fixedContainer(contentContainerStyle)}>
+							{fixedChildren}
 						</div>
 					</div>
 				</FixedContext.Provider>

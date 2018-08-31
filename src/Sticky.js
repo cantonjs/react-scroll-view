@@ -19,9 +19,9 @@ export default class Sticky extends Component {
 
 	renderChildren = (stickyContext) => {
 		this.stickyContext = stickyContext;
-		const { props: { children }, stickyContext: { status } } = this;
+		const { props: { children }, stickyContext: { position } } = this;
 
-		if (status === 'fixed') {
+		if (position === 'fixed') {
 			return (
 				<Fixed>
 					<div style={styles.stickyFixed}>{children}</div>
@@ -29,7 +29,7 @@ export default class Sticky extends Component {
 			);
 		}
 		else {
-			const topOrBottom = status;
+			const topOrBottom = position;
 			return (
 				<div ref={this.saveDOMNode} style={styles.stickyRelative(topOrBottom)}>
 					{children}

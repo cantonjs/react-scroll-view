@@ -2,53 +2,53 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StickyContext } from './Contexts';
 import Hook from './Hook';
+import Sticky from './Sticky';
 import styles from './styles';
 
 export default class StickySection extends Component {
 	static propTypes = {
 		children: PropTypes.node,
+		sticky: PropTypes.node,
 		style: PropTypes.object,
 	};
 
 	state = {
 		stickyStyle: {},
-		isIntersecting: false,
-		status: 'top',
+		position: 'top',
 		setStickyStyle: (stickyStyle) => {
 			this.setState({ stickyStyle });
 		},
 	};
 
 	handleTopEnter = (direction) => {
-		if (direction === 'up') {
-			this.setState({ status: 'top' });
+		if (direction === 'up' && this.state.position !== 'up') {
+			this.setState({ position: 'top' });
 		}
 	};
 
 	handleTopLeave = (direction) => {
-		if (direction === 'down') {
-			this.setState({ status: 'fixed' });
+		if (direction === 'down' && this.state.position !== 'fixed') {
+			this.setState({ position: 'fixed' });
 		}
 	};
 
 	handleBottomEnter = (direction) => {
-		if (direction === 'up') {
-			this.setState({ status: 'fixed' });
+		if (direction === 'up' && this.state.position !== 'fixed') {
+			this.setState({ position: 'fixed' });
 		}
 	};
 
 	handleBottomLeave = (direction) => {
-		if (direction === 'down') {
-			this.setState({ status: 'bottom' });
+		if (direction === 'down' && this.state.position !== 'down') {
+			this.setState({ position: 'bottom' });
 		}
 	};
 
 	render() {
 		const {
-			props: { children, style, ...other },
+			props: { children, sticky, style, ...other },
 			state: { stickyStyle },
 		} = this;
-		const stickyHeight = stickyStyle.height || 0;
 		return (
 			<StickyContext.Provider value={this.state}>
 				<div {...other} style={styles.stickySectionContainer(style)}>
@@ -59,10 +59,11 @@ export default class StickySection extends Component {
 						style={styles.stickySectionTopHook}
 					/>
 					{children}
+					{sticky && <Sticky>{sticky}</Sticky>}
 					<Hook
 						onEnter={this.handleBottomEnter}
 						onLeave={this.handleBottomLeave}
-						style={styles.stickySectionBottomHook(stickyHeight)}
+						style={styles.stickySectionBottomHook(stickyStyle.height)}
 					/>
 				</div>
 			</StickyContext.Provider>
