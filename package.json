@@ -33,6 +33,7 @@
 	"license": "MIT",
 	"dependencies": {
 		"create-react-context": "^0.2.2",
+		"memoize-one": "^4.0.2",
 		"prop-types": "^15.5.7",
 		"warning": "^4.0.1"
 	},

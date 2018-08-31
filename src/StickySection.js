@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StickyContext } from './Contexts';
 import Hook from './Hook';
+import styles from './styles';
 
 export default class StickySection extends Component {
 	static propTypes = {
@@ -50,24 +51,18 @@ export default class StickySection extends Component {
 		const stickyHeight = stickyStyle.height || 0;
 		return (
 			<StickyContext.Provider value={this.state}>
-				<div {...other} style={{ position: 'relative', ...style }}>
+				<div {...other} style={styles.stickySectionContainer(style)}>
 					<div style={stickyStyle} />
 					<Hook
 						onEnter={this.handleTopEnter}
 						onLeave={this.handleTopLeave}
-						style={{
-							position: 'absolute',
-							top: 0,
-						}}
+						style={styles.stickySectionTopHook}
 					/>
 					{children}
 					<Hook
 						onEnter={this.handleBottomEnter}
 						onLeave={this.handleBottomLeave}
-						style={{
-							position: 'absolute',
-							bottom: stickyHeight,
-						}}
+						style={styles.stickySectionBottomHook(stickyHeight)}
 					/>
 				</div>
 			</StickyContext.Provider>

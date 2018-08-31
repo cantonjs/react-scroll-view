@@ -1,4 +1,5 @@
 import { isIOS } from './util';
+import memoize from 'memoize-one';
 import { PullThreshold } from './constants';
 
 const baseStyles = {
@@ -22,11 +23,12 @@ const styles = {
 		position: 'relative',
 	},
 	vertical: {
-		main: {
+		main: memoize((style, disabled) => ({
 			...baseStyles.main,
 			overflowX: 'hidden',
-			overflowY: isIOS ? 'scroll' : 'auto',
-		},
+			overflowY: disabled ? 'hidden' : isIOS ? 'scroll' : 'auto',
+			...style,
+		})),
 		background: {
 			...baseStyles.background,
 			width: '100%',
@@ -34,11 +36,12 @@ const styles = {
 		},
 	},
 	horizontal: {
-		main: {
+		main: memoize((style, disabled) => ({
 			...baseStyles.main,
-			overflowX: isIOS ? 'scroll' : 'auto',
+			overflowX: disabled ? 'hidden' : isIOS ? 'scroll' : 'auto',
 			overflowY: 'hidden',
-		},
+			...style,
+		})),
 		background: {
 			...baseStyles.background,
 			width: 'calc(100% + 1px)',
@@ -59,14 +62,55 @@ const styles = {
 		marginLeft: -50,
 		textAlign: 'center',
 	},
-	fixedContainer: {
+	fixedContainer: memoize((style) => ({
+		...style,
 		position: 'absolute',
 		left: 0,
 		right: 0,
 		top: 0,
 		height: 0,
 		zIndex: 666666,
+	})),
+	endHook: memoize((bottom) => ({
+		position: 'relative',
+		bottom,
+	})),
+
+	hook: memoize((style) => ({
+		pointerEvents: 'none',
+		...style,
+	})),
+
+	stickySectionContainer: memoize((style) => ({
+		position: 'relative',
+		...style,
+	})),
+	stickySectionTopHook: {
+		position: 'absolute',
+		top: 0,
 	},
+	stickySectionBottomHook: memoize((bottom) => ({
+		position: 'absolute',
+		bottom,
+	})),
+
+	stickyFixed: {
+		position: 'absolute',
+		top: 0,
+		// width: 'inherit',
+		left: 'inherit',
+		right: 'inherit',
+		paddingLeft: 'inherit',
+		paddingRight: 'inherit',
+		marginLeft: 'inherit',
+		marginRight: 'inherit',
+	},
+	stickyRelative: memoize((topOrBottom) => ({
+		position: 'absolute',
+		left: 0,
+		right: 0,
+		[topOrBottom]: 0,
+	})),
 };
 
 export default styles;

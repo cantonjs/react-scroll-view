@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ScrollObserver from './ScrollObserver';
+import styles from './styles';
 
 export default function Hook({ onEnter, onLeave, style }) {
 	return (
@@ -10,7 +11,7 @@ export default function Hook({ onEnter, onLeave, style }) {
 					role="none"
 					aria-label="react-scroll-hook"
 					ref={ref}
-					style={{ ...style, pointerEvents: 'none' }}
+					style={styles.hook(style)}
 				/>
 			)}
 		</ScrollObserver>

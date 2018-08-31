@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StickyContext } from './Contexts';
 import Fixed from './Fixed';
+import styles from './styles';
 
 export default class Sticky extends Component {
 	static propTypes = {
@@ -23,35 +24,14 @@ export default class Sticky extends Component {
 		if (status === 'fixed') {
 			return (
 				<Fixed>
-					<div
-						style={{
-							position: 'absolute',
-							top: 0,
-							// width: 'inherit',
-							left: 'inherit',
-							right: 'inherit',
-							paddingLeft: 'inherit',
-							paddingRight: 'inherit',
-							marginLeft: 'inherit',
-							marginRight: 'inherit',
-						}}
-					>
-						{children}
-					</div>
+					<div style={styles.stickyFixed}>{children}</div>
 				</Fixed>
 			);
 		}
 		else {
+			const topOrBottom = status;
 			return (
-				<div
-					ref={this.saveDOMNode}
-					style={{
-						position: 'absolute',
-						left: 0,
-						right: 0,
-						[status]: 0,
-					}}
-				>
+				<div ref={this.saveDOMNode} style={styles.stickyRelative(topOrBottom)}>
 					{children}
 				</div>
 			);

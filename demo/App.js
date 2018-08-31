@@ -60,6 +60,7 @@ export default class App extends Component {
 			<ScrollView
 				style={styles.container}
 				contentContainerStyle={styles.contentContainer}
+				endReachedThreshold={500}
 				onScrollStart={this.handleScrollStart}
 				onScrollEnd={this.handleScrollEnd}
 				onEndReached={this.handleEndReached}

@@ -99,8 +99,6 @@ export default class ScrollView extends Component {
 		this.toEmitOnScrollEnd.clearDebounce();
 	}
 
-	overflowStyle = styles.vertical.main.overflowY;
-
 	scrollViewRef = (dom) => {
 		forwardRef(this.props.innerRef, dom);
 		this.dom = dom;
@@ -143,6 +141,7 @@ export default class ScrollView extends Component {
 			const dy = ev.touches[0].clientY - this.y0;
 			if (dy > 0 && !this.isPullingDown) {
 				this.refreshControl.start();
+				this.overflowStyle = this.dom.style.overflowY;
 				this.dom.style.overflowY = 'hidden';
 				this.isPullingDown = true;
 			}
@@ -204,26 +203,17 @@ export default class ScrollView extends Component {
 			fixedContext,
 		} = this;
 		const direction = isHorizontal ? 'horizontal' : 'vertical';
-		const styled = { ...styles[direction].main, ...style };
-		if (disabled) {
-			styled.overflowX = 'hidden';
-			styled.overflowY = 'hidden';
-		}
+		const mainStyle = styles[direction].main(style, disabled);
 		return (
 			<ObserverContext.Provider value={observer}>
 				<FixedContext.Provider value={fixedContext}>
 					<div style={styles.container}>
-						<div
-							style={{
-								...contentContainerStyle,
-								...styles.fixedContainer,
-							}}
-						>
+						<div style={styles.fixedContainer(contentContainerStyle)}>
 							{fixedChildren}
 						</div>
 						<div
 							{...other}
-							style={styled}
+							style={mainStyle}
 							ref={this.scrollViewRef}
 							onScroll={this.handleScroll}
 							onTouchStart={this.handleTouchStart}
@@ -248,10 +238,7 @@ export default class ScrollView extends Component {
 							{isIOS && <div style={styles[direction].background} />}
 							{!isHorizontal && (
 								<Hook
-									style={{
-										position: 'relative',
-										bottom: endReachedThreshold,
-									}}
+									style={styles.endHook(endReachedThreshold)}
 									onEnter={this.handleEndEnter}
 								/>
 							)}
