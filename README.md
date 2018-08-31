@@ -15,8 +15,9 @@ React scroll component
 
 ## Features
 
-- Support `onEndReach()`, `onScrollStart()` and `onScrollEnd()` events
+- Support sticky for cross browsers (including Mobile Safari)
 - Support refresh control
+- Support `onEndReach()`, `onScrollStart()` and `onScrollEnd()` events
 - Easy to observe the intersections between scroll view and children
 
 ## Installation
