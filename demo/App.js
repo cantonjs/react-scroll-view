@@ -1,7 +1,7 @@
 import 'intersection-observer';
 import React, { Component } from 'react';
 import LazyElement from './LazyElement';
-import { ScrollView, StickySection, Sticky } from '../src';
+import { ScrollView, StickySection } from '../src';
 
 const styles = {
 	container: {
