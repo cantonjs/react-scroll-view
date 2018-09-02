@@ -11,11 +11,12 @@ React scroll component
 - [References](#references)
   - [ScrollView Component](#scrollview-component)
   - [ScrollObserver Component](#scrollobserver-component)
+  - [StickySection Component](#stickysection-component)
 - [License](#license)
 
 ## Features
 
-- Support sticky for cross browsers (including Mobile Safari)
+- Support sticky for cross browsers (including Mobile Safari)****
 - Support refresh control
 - Support `onEndReach()`, `onScrollStart()` and `onScrollEnd()` events
 - Easy to observe the intersections between scroll view and children
@@ -44,7 +45,7 @@ export default class App extends Component {
 
   render() {
     return (
-      <ScrollView onEndReached={this.handleEndReached}>
+      <ScrollView onEndReached={this.handleEndReached} style={{ height: '100vh' }}>
         <h1>React Scroll View</h1>
         <p>Awseome!</p>
       </ScrollView>
@@ -120,7 +121,7 @@ export default class App extends Component {
 
   render() {
     return (
-      <ScrollView onEndReached={this.handleEndReached}>
+      <ScrollView onEndReached={this.handleEndReached} style={{ height: '100vh' }}>
         <h1>React Scroll View</h1>
         <p>Awseome!</p>
         <ScrollObserver>
@@ -139,6 +140,56 @@ export default class App extends Component {
 }
 ```
 
+### StickySection Component
+
+```jsx
+import { StickySection } from "@cantonjs/react-scroll-view";
+```
+
+Section component with a sticky.
+
+#### Props
+
+| Property | Description         | Type |
+| -------- | ------------------- | ---- |
+| sticky   | Sticky node element | Node |
+
+The rest of the props are exactly the same as the original [DOM attributes](https://reactjs.org/docs/dom-elements.html#all-supported-html-attributes).
+
+#### Example
+
+```js
+import "intersection-observer";
+import React, { Component } from "react";
+import { ScrollView, ScrollSection } from "@cantonjs/react-scroll-view";
+
+export default class App extends Component {
+  render() {
+    return (
+      <ScrollView style={{ height: '100vh' }}>
+        <StickySection sticky={<h1>A</h1>}>
+          <ul>
+            <li>Adelia Pisano</li>
+            <li>Alayna Loredo</li>
+          </ul>
+        </StickySection>
+        <StickySection sticky={<h1>B</h1>}>
+          <ul>
+            <li>Brant Hunsberger</li>
+          </ul>
+        </StickySection>
+        <StickySection sticky={<h1>C</h1>}>
+          <ul>
+            <li>Carl Wetzler</li>
+            <li>Cherry Greeno</li>
+            <li>Cris Kepley</li>
+          </ul>
+        </StickySection>
+      </ScrollView>
+    );
+  }
+}
+```
 
 ## License
 
