@@ -20,25 +20,25 @@ export default class StickySection extends Component {
 		},
 	};
 
-	handleTopEnter = (direction) => {
+	handleTopEnter = ({ direction }) => {
 		if (direction === 'up' && this.state.position !== 'up') {
 			this.setState({ position: 'top' });
 		}
 	};
 
-	handleTopLeave = (direction) => {
+	handleTopLeave = ({ direction }) => {
 		if (direction === 'down' && this.state.position !== 'fixed') {
 			this.setState({ position: 'fixed' });
 		}
 	};
 
-	handleBottomEnter = (direction) => {
+	handleBottomEnter = ({ direction }) => {
 		if (direction === 'up' && this.state.position !== 'fixed') {
 			this.setState({ position: 'fixed' });
 		}
 	};
 
-	handleBottomLeave = (direction) => {
+	handleBottomLeave = ({ direction }) => {
 		if (direction === 'down' && this.state.position !== 'down') {
 			this.setState({ position: 'bottom' });
 		}
