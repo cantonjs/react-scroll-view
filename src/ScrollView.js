@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { isIOS, forwardRef, debounce } from './util';
 import { refType } from './PropTypes';
 import Observer from './Observer';
+import FixedState from './FixedState';
 import Hook from './Hook';
 import RefreshControl from './RefreshControl';
 import { ObserverContext, FixedContext } from './Contexts';
@@ -63,20 +64,7 @@ export default class ScrollView extends Component {
 		}, 100);
 
 		this.fixedChildren = [];
-		this.fixedContext = {
-			isRoot: false,
-			mount: (children) => {
-				this.fixedChildren.push(children);
-				this.forceUpdate();
-			},
-			unmount: (children) => {
-				const index = this.fixedChildren.indexOf(children);
-				if (index > -1) {
-					this.fixedChildren.splice(index, 1);
-					this.forceUpdate();
-				}
-			},
-		};
+		this.fixedState = new FixedState(this.forceUpdate.bind(this));
 	}
 
 	componentDidMount() {
@@ -108,7 +96,7 @@ export default class ScrollView extends Component {
 		this.refreshControl = refreshControl;
 	};
 
-	handleEndEnter = (direction) => {
+	handleEndEnter = ({ direction }) => {
 		const { onEndReached } = this.props;
 		if (direction === 'down' && onEndReached) onEndReached();
 	};
@@ -199,14 +187,13 @@ export default class ScrollView extends Component {
 				...other
 			},
 			observer,
-			fixedChildren,
-			fixedContext,
+			fixedState,
 		} = this;
 		const direction = isHorizontal ? 'horizontal' : 'vertical';
 		const mainStyle = styles[direction].main(style, disabled);
 		return (
 			<ObserverContext.Provider value={observer}>
-				<FixedContext.Provider value={fixedContext}>
+				<FixedContext.Provider value={fixedState}>
 					<div style={styles.container}>
 						<div
 							{...other}
@@ -241,7 +228,7 @@ export default class ScrollView extends Component {
 							)}
 						</div>
 						<div style={styles.fixedContainer(contentContainerStyle)}>
-							{fixedChildren}
+							{fixedState.children}
 						</div>
 					</div>
 				</FixedContext.Provider>
