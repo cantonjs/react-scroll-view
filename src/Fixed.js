@@ -8,20 +8,24 @@ export default class Fixed extends Component {
 	};
 
 	componentDidMount() {
-		const { fixedContext, props: { children } } = this;
-		if (fixedContext.mount) {
-			fixedContext.mount(Children.only(children));
-		}
+		this.renderInContext();
 	}
 
-	componentDidUpdate() {
-		// TODO:
+	componentDidUpdate({ children }) {
+		this.renderInContext(children);
 	}
 
 	componentWillUnmount() {
 		const { fixedContext, props: { children } } = this;
 		if (fixedContext.unmount) {
 			fixedContext.unmount(children);
+		}
+	}
+
+	renderInContext(prevChildren) {
+		const { fixedContext, props: { children } } = this;
+		if (fixedContext.render) {
+			fixedContext.render(Children.only(children), prevChildren);
 		}
 	}
 
