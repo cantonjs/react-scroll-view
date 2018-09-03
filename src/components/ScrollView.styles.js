@@ -8,14 +8,18 @@ export default create({
 		width: 'inherit',
 		...style,
 	}),
-	main: (style, direction, disabled) => ({
-		position: 'relative',
-		[direction === 'vertical' ? 'overflowX' : 'overflowY']: 'hidden',
-		[direction === 'vertical' ? 'overflowY' : 'overflowX']: disabled ?
-			'hidden' :
-			isIOS ? 'scroll' : 'auto',
-		...style,
-	}),
+	main: (style, direction, disabled) => {
+		const res = {
+			position: 'relative',
+			[direction === 'vertical' ? 'overflowX' : 'overflowY']: 'hidden',
+			[direction === 'vertical' ? 'overflowY' : 'overflowX']: disabled ?
+				'hidden' :
+				isIOS ? 'scroll' : 'auto',
+			...style,
+		};
+		if (isIOS) res.WebkitOverflowScrolling = 'touch';
+		return res;
+	},
 	background: (direction) => {
 		const vertical = {
 			width: '100%',
