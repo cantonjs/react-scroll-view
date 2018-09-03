@@ -13,4 +13,5 @@ export default create({
 		position: 'absolute',
 		bottom,
 	}),
+	sticky: (zIndex) => ({ zIndex }),
 });

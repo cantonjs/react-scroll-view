@@ -10,6 +10,7 @@ export default class StickySection extends Component {
 		children: PropTypes.node,
 		sticky: PropTypes.node,
 		style: PropTypes.object,
+		stickyZIndex: PropTypes.number,
 	};
 
 	state = {
@@ -18,6 +19,7 @@ export default class StickySection extends Component {
 		setStickyStyle: (stickyStyle) => {
 			this.setState({ stickyStyle });
 		},
+		stickyZIndex: 1,
 	};
 
 	styles = createStyles();
@@ -48,7 +50,7 @@ export default class StickySection extends Component {
 
 	render() {
 		const {
-			props: { children, sticky, style, ...other },
+			props: { children, sticky, stickyZIndex, style, ...other },
 			state: { stickyStyle },
 			styles,
 		} = this;
@@ -62,7 +64,9 @@ export default class StickySection extends Component {
 						style={styles.topHook}
 					/>
 					{children}
-					{sticky && <Sticky>{sticky}</Sticky>}
+					{sticky && (
+						<Sticky style={styles.sticky(stickyZIndex)}>{sticky}</Sticky>
+					)}
 					<Hook
 						onEnter={this.handleBottomEnter}
 						onLeave={this.handleBottomLeave}

@@ -7,6 +7,7 @@ import Fixed from './Fixed';
 export default class Sticky extends Component {
 	static propTypes = {
 		children: PropTypes.node,
+		style: PropTypes.object,
 	};
 
 	styles = createStyles();
@@ -21,7 +22,11 @@ export default class Sticky extends Component {
 
 	renderChildren = (stickyContext) => {
 		this.stickyContext = stickyContext;
-		const { props: { children }, stickyContext: { position }, styles } = this;
+		const {
+			props: { children, style },
+			stickyContext: { position },
+			styles,
+		} = this;
 		if (position === 'fixed') {
 			return (
 				<Fixed>
@@ -32,7 +37,7 @@ export default class Sticky extends Component {
 		else {
 			const topOrBottom = position;
 			return (
-				<div ref={this.saveDOMNode} style={styles.relative(topOrBottom)}>
+				<div ref={this.saveDOMNode} style={styles.relative(style, topOrBottom)}>
 					{children}
 				</div>
 			);

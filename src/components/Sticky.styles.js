@@ -12,11 +12,12 @@ export default create({
 		marginLeft: 'inherit',
 		marginRight: 'inherit',
 	},
-	relative: (topOrBottom) => ({
+	relative: (style, topOrBottom) => ({
 		position: 'absolute',
 		zIndex: 1,
 		left: 0,
 		right: 0,
 		[topOrBottom]: 0,
+		...style,
 	}),
 });
