@@ -1,7 +1,16 @@
 export default class FixedState {
-	constructor(forceUpdate) {
-		this.forceUpdate = forceUpdate;
+	constructor() {
 		this.children = [];
+	}
+
+	bind(reactInstance) {
+		if (!this.forceUpdate) {
+			this.forceUpdate = reactInstance.forceUpdate.bind(reactInstance);
+		}
+	}
+
+	unbind() {
+		this.forceUpdate = null;
 	}
 
 	render(child, prev) {
@@ -11,7 +20,7 @@ export default class FixedState {
 			if (index > -1) children.splice(index, 1, child);
 		}
 		else children.push(child);
-		this.forceUpdate();
+		this.forceUpdate && this.forceUpdate();
 	}
 
 	unmount(child) {
@@ -19,7 +28,7 @@ export default class FixedState {
 		const index = children.indexOf(child);
 		if (index > -1) {
 			children.splice(index, 1);
-			this.forceUpdate();
+			this.forceUpdate && this.forceUpdate();
 		}
 	}
 }

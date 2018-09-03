@@ -7,6 +7,7 @@ import Observer from '../Observer';
 import FixedState from '../FixedState';
 import Hook from './Hook';
 import RefreshControl from './RefreshControl';
+import FixedContainer from './FixedContainer';
 import { ObserverContext, FixedContext } from '../Contexts';
 import warning from 'warning';
 
@@ -67,7 +68,7 @@ export default class ScrollView extends Component {
 		}, 100);
 
 		this.fixedChildren = [];
-		this.fixedState = new FixedState(this.forceUpdate.bind(this));
+		this.fixedState = new FixedState();
 	}
 
 	componentDidMount() {
@@ -235,9 +236,11 @@ export default class ScrollView extends Component {
 								/>
 							)}
 						</div>
-						<div style={styles.fixedContainer(contentContainerStyle)}>
+						<FixedContainer
+							style={styles.fixedContainer(contentContainerStyle)}
+						>
 							{fixedState.children}
-						</div>
+						</FixedContainer>
 					</div>
 				</FixedContext.Provider>
 			</ObserverContext.Provider>

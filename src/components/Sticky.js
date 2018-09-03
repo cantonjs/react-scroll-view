@@ -22,7 +22,6 @@ export default class Sticky extends Component {
 	renderChildren = (stickyContext) => {
 		this.stickyContext = stickyContext;
 		const { props: { children }, stickyContext: { position }, styles } = this;
-
 		if (position === 'fixed') {
 			return (
 				<Fixed>

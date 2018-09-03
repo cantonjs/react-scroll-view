@@ -12,7 +12,9 @@ export default class Fixed extends Component {
 	}
 
 	componentDidUpdate({ children }) {
-		this.renderInContext(children);
+		if (children !== this.props.children) {
+			this.renderInContext(children);
+		}
 	}
 
 	componentWillUnmount() {
