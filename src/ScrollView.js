@@ -13,6 +13,8 @@ import warning from 'warning';
 export default class ScrollView extends Component {
 	static propTypes = {
 		style: PropTypes.object,
+		containerStyle: PropTypes.object,
+		containerClassName: PropTypes.string,
 		contentContainerStyle: PropTypes.object,
 		contentContainerClassName: PropTypes.string,
 		children: PropTypes.node,
@@ -170,6 +172,8 @@ export default class ScrollView extends Component {
 		const {
 			props: {
 				style,
+				containerStyle,
+				containerClassName,
 				contentContainerStyle,
 				contentContainerClassName,
 				children,
@@ -190,14 +194,16 @@ export default class ScrollView extends Component {
 			fixedState,
 		} = this;
 		const direction = isHorizontal ? 'horizontal' : 'vertical';
-		const mainStyle = styles[direction].main(style, disabled);
 		return (
 			<ObserverContext.Provider value={observer}>
 				<FixedContext.Provider value={fixedState}>
-					<div style={styles.container}>
+					<div
+						style={styles.container(containerStyle)}
+						className={containerClassName}
+					>
 						<div
 							{...other}
-							style={mainStyle}
+							style={styles.main(style, direction, disabled)}
 							ref={this.scrollViewRef}
 							onScroll={this.handleScroll}
 							onTouchStart={this.handleTouchStart}
@@ -219,7 +225,7 @@ export default class ScrollView extends Component {
 							>
 								{children}
 							</div>
-							{isIOS && <div style={styles[direction].background} />}
+							{isIOS && <div style={styles.background(direction)} />}
 							{!isHorizontal && (
 								<Hook
 									style={styles.endHook(endReachedThreshold)}

@@ -2,52 +2,39 @@ import { isIOS } from './util';
 import memoize from 'memoize-one';
 import { PullThreshold } from './constants';
 
-const baseStyles = {
-	main: {
-		position: 'relative',
-	},
-	background: {
-		position: 'absolute',
-		top: 0,
-		left: 0,
-		zIndex: -1,
-	},
-};
-
-if (isIOS) {
-	baseStyles.main.WebkitOverflowScrolling = 'touch';
-}
-
 const styles = {
-	container: {
+	container: memoize((style) => ({
 		position: 'relative',
-	},
-	vertical: {
-		main: memoize((style, disabled) => ({
-			...baseStyles.main,
-			overflowX: 'hidden',
-			overflowY: disabled ? 'hidden' : isIOS ? 'scroll' : 'auto',
-			...style,
-		})),
-		background: {
-			...baseStyles.background,
+		height: 'inherit',
+		width: 'inherit',
+		...style,
+	})),
+	main: memoize((style, direction, disabled) => ({
+		position: 'relative',
+		[direction === 'vertical' ? 'overflowX' : 'overflowY']: 'hidden',
+		[direction === 'vertical' ? 'overflowY' : 'overflowX']: disabled ?
+			'hidden' :
+			isIOS ? 'scroll' : 'auto',
+		...style,
+	})),
+	background: memoize((direction) => {
+		const vertical = {
 			width: '100%',
 			height: 'calc(100% + 1px)',
-		},
-	},
-	horizontal: {
-		main: memoize((style, disabled) => ({
-			...baseStyles.main,
-			overflowX: disabled ? 'hidden' : isIOS ? 'scroll' : 'auto',
-			overflowY: 'hidden',
-			...style,
-		})),
-		background: {
-			...baseStyles.background,
+		};
+		const horizontal = {
 			width: 'calc(100% + 1px)',
 			height: '100%',
-		},
-	},
+		};
+		const style = direction === 'vertical' ? vertical : horizontal;
+		return {
+			position: 'absolute',
+			top: 0,
+			left: 0,
+			zIndex: -1,
+			...style,
+		};
+	}),
 	refreshControl: {
 		height: 0,
 		overflow: 'hidden',
