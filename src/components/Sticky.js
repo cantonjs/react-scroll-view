@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { StickyContext } from './Contexts';
+import { StickyContext } from '../Contexts';
 import Fixed from './Fixed';
-import styles from './styles';
+import styles from '../styles';
 
 export default class Sticky extends Component {
 	static propTypes = {

@@ -1,13 +1,13 @@
-import styles from './styles';
+import styles from '../styles';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { isIOS, forwardRef, debounce } from './util';
-import { refType } from './PropTypes';
-import Observer from './Observer';
-import FixedState from './FixedState';
+import { isIOS, forwardRef, debounce } from '../util';
+import { refType } from '../PropTypes';
+import Observer from '../Observer';
+import FixedState from '../FixedState';
 import Hook from './Hook';
 import RefreshControl from './RefreshControl';
-import { ObserverContext, FixedContext } from './Contexts';
+import { ObserverContext, FixedContext } from '../Contexts';
 import warning from 'warning';
 
 export default class ScrollView extends Component {

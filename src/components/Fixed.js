@@ -1,6 +1,6 @@
 import React, { Component, Children } from 'react';
 import PropTypes from 'prop-types';
-import { FixedContext } from './Contexts';
+import { FixedContext } from '../Contexts';
 
 export default class Fixed extends Component {
 	static propTypes = {

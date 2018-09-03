@@ -1,9 +1,9 @@
-import styles from './styles';
+import styles from '../styles';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Arrow from './Arrow';
 import Loading from './Loading';
-import { PullThreshold } from './constants';
+import { PullThreshold } from '../constants';
 
 export default class RefreshControl extends Component {
 	static propTypes = {

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { ObserverContext } from './Contexts';
-import Intersection from './Intersection';
-import { forwardRef } from './util';
-import { refType, thresholdType } from './PropTypes';
+import { ObserverContext } from '../Contexts';
+import Intersection from '../Intersection';
+import { forwardRef } from '../util';
+import { refType, thresholdType } from '../PropTypes';
 
 export default class ScrollObserver extends Component {
 	static propTypes = {
