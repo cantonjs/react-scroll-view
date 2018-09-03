@@ -1,4 +1,4 @@
-import { create } from '../Styles';
+import { create } from '../Style';
 import { PullThreshold } from '../constants';
 
 export default create({

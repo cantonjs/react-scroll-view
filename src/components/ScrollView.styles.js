@@ -1,5 +1,5 @@
 import { isIOS } from '../util';
-import { create } from '../Styles';
+import { create } from '../Style';
 
 export default create({
 	container: (style) => ({

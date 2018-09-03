@@ -1,4 +1,4 @@
-import { create } from '../Styles';
+import { create } from '../Style';
 
 export default create({
 	hook: (style) => ({
