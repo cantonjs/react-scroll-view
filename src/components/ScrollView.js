@@ -1,4 +1,4 @@
-import styles from '../styles';
+import createStyles from './ScrollView.styles';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { isIOS, forwardRef, debounce } from '../util';
@@ -58,6 +58,7 @@ export default class ScrollView extends Component {
 			'`onEndReached` with `isHorizontal` is NOT supported, `onEndReached` will be ignored',
 		);
 
+		this.styles = createStyles();
 		this.observer = new Observer();
 		this.toEmitOnScrollEnd = debounce((ev) => {
 			const { onScrollEnd } = this.props;
@@ -190,6 +191,7 @@ export default class ScrollView extends Component {
 				innerRef,
 				...other
 			},
+			styles,
 			observer,
 			fixedState,
 		} = this;

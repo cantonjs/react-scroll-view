@@ -1,4 +1,4 @@
-import styles from '../styles';
+import createStyles from './RefreshControl.styles';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Arrow from './Arrow';
@@ -11,6 +11,8 @@ export default class RefreshControl extends Component {
 		color: PropTypes.string.isRequired,
 		style: PropTypes.object,
 	};
+
+	styles = createStyles();
 
 	shouldRefresh = false;
 
@@ -50,29 +52,20 @@ export default class RefreshControl extends Component {
 		const {
 			props: { color, style, isRefreshing, ...other },
 			shouldRefresh,
+			styles,
 		} = this;
 
 		return (
 			<div
 				{...other}
-				style={{
-					...style,
-					...styles.refreshControl,
-					minHeight: isRefreshing ? PullThreshold : 0,
-				}}
+				style={styles.container(style, isRefreshing)}
 				ref={this.domRef}
 			>
-				<div style={styles.refreshControlIcon}>
+				<div style={styles.iconContainer}>
 					{isRefreshing ? (
 						<Loading color={color} />
 					) : (
-						<Arrow
-							color={color}
-							style={{
-								transform: `rotateZ(${shouldRefresh ? 180 : 0}deg)`,
-								transition: 'transform 0.3s',
-							}}
-						/>
+						<Arrow color={color} style={styles.arrowIcon(shouldRefresh)} />
 					)}
 				</div>
 			</div>

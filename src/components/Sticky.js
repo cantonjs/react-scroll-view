@@ -1,13 +1,15 @@
+import createStyles from './Sticky.styles';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StickyContext } from '../Contexts';
 import Fixed from './Fixed';
-import styles from '../styles';
 
 export default class Sticky extends Component {
 	static propTypes = {
 		children: PropTypes.node,
 	};
+
+	styles = createStyles();
 
 	saveDOMNode = (dom) => {
 		if (!this.dom && this.stickyContext) {
@@ -19,19 +21,19 @@ export default class Sticky extends Component {
 
 	renderChildren = (stickyContext) => {
 		this.stickyContext = stickyContext;
-		const { props: { children }, stickyContext: { position } } = this;
+		const { props: { children }, stickyContext: { position }, styles } = this;
 
 		if (position === 'fixed') {
 			return (
 				<Fixed>
-					<div style={styles.stickyFixed}>{children}</div>
+					<div style={styles.fixed}>{children}</div>
 				</Fixed>
 			);
 		}
 		else {
 			const topOrBottom = position;
 			return (
-				<div ref={this.saveDOMNode} style={styles.stickyRelative(topOrBottom)}>
+				<div ref={this.saveDOMNode} style={styles.relative(topOrBottom)}>
 					{children}
 				</div>
 			);

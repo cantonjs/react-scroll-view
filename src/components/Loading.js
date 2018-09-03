@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-const style = {
-	transition: 'opacity 0.3s',
-};
+const style = { transition: 'opacity 0.3s' };
 
 export default class Loading extends Component {
 	static propTypes = {
