@@ -4,18 +4,18 @@ import { create } from '../Style';
 export default create({
 	container: (style) => ({
 		position: 'relative',
-		height: 'inherit',
-		width: 'inherit',
 		...style,
 	}),
-	main: (style, direction, disabled) => {
+	main: (direction, disabled) => {
+		const overflowHidden = direction === 'vertical' ? 'overflowX' : 'overflowY';
+		const overflowScroll = direction === 'vertical' ? 'overflowY' : 'overflowX';
 		const res = {
+			// all: 'inherit',
 			position: 'relative',
-			[direction === 'vertical' ? 'overflowX' : 'overflowY']: 'hidden',
-			[direction === 'vertical' ? 'overflowY' : 'overflowX']: disabled ?
-				'hidden' :
-				isIOS ? 'scroll' : 'auto',
-			...style,
+			height: '100%',
+			width: '100%',
+			[overflowHidden]: 'hidden',
+			[overflowScroll]: disabled ? 'hidden' : isIOS ? 'scroll' : 'auto',
 		};
 		if (isIOS) res.WebkitOverflowScrolling = 'touch';
 		return res;

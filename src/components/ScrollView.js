@@ -14,8 +14,7 @@ import warning from 'warning';
 export default class ScrollView extends Component {
 	static propTypes = {
 		style: PropTypes.object,
-		containerStyle: PropTypes.object,
-		containerClassName: PropTypes.string,
+		className: PropTypes.string,
 		contentContainerStyle: PropTypes.object,
 		contentContainerClassName: PropTypes.string,
 		children: PropTypes.node,
@@ -174,8 +173,7 @@ export default class ScrollView extends Component {
 		const {
 			props: {
 				style,
-				containerStyle,
-				containerClassName,
+				className,
 				contentContainerStyle,
 				contentContainerClassName,
 				children,
@@ -200,13 +198,10 @@ export default class ScrollView extends Component {
 		return (
 			<ObserverContext.Provider value={observer}>
 				<FixedContext.Provider value={fixedState}>
-					<div
-						style={styles.container(containerStyle)}
-						className={containerClassName}
-					>
+					<div style={styles.container(style)} className={className}>
 						<div
 							{...other}
-							style={styles.main(style, direction, disabled)}
+							style={styles.main(direction, disabled)}
 							ref={this.scrollViewRef}
 							onScroll={this.handleScroll}
 							onTouchStart={this.handleTouchStart}
