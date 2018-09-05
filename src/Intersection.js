@@ -8,12 +8,13 @@ export default class Intersection {
 		this._isIntersecting = false;
 	}
 
-	onIntersect(entry, ...args) {
+	onIntersect(eventData) {
+		const { entry } = eventData;
 		const { isIntersecting } = entry;
 		if (this._isIntersecting !== isIntersecting) {
 			this._isIntersecting = isIntersecting;
-			this[isIntersecting ? 'onEnter' : 'onLeave'](...args);
+			this[isIntersecting ? 'onEnter' : 'onLeave'](eventData);
 		}
-		this._onIntersect(entry, ...args);
+		this._onIntersect(eventData);
 	}
 }

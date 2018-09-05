@@ -43,7 +43,7 @@ export default class Observer {
 					const { direction, _boxes } = this;
 					if (_boxes.has(target)) {
 						const { intersection } = _boxes.get(target);
-						intersection.onIntersect(entry, { direction });
+						intersection.onIntersect({ entry, direction });
 					}
 				});
 			const observer = new IntersectionObserver(callback, {
