@@ -20,8 +20,9 @@ const createBox = (observer, intersection) => ({
 export default class Observer {
 	constructor() {
 		this._boxes = new Map();
-		this.prevScrollPos = 0;
-		this.direction = 'down';
+		this._prevScrollPos = 0;
+		this._currScrollPos = 0;
+		this.direction = '';
 	}
 
 	mount(root) {
@@ -66,14 +67,14 @@ export default class Observer {
 		}
 	}
 
-	getScrollPos() {
-		return this.dom.scrollTop;
+	get scrollPos() {
+		return this._prevScrollPos;
 	}
 
 	updateDirection(ev) {
 		const { scrollTop } = ev.currentTarget;
-		const { prevScrollPos } = this;
-		this.direction = scrollTop < prevScrollPos ? 'up' : 'down';
-		this.prevScrollPos = scrollTop;
+		const { _prevScrollPos } = this;
+		this.direction = scrollTop < _prevScrollPos ? 'up' : 'down';
+		this._prevScrollPos = scrollTop;
 	}
 }
