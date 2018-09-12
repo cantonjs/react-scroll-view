@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { StickyContext } from '../Contexts';
 import Hook from './Hook';
 import Sticky from './Sticky';
+import ScrollObserver from './ScrollObserver';
 
 export default class StickySection extends Component {
 	static propTypes = {
@@ -24,14 +25,16 @@ export default class StickySection extends Component {
 
 	styles = createStyles();
 
-	handleTopEnter = ({ direction }) => {
-		if (direction === 'up' && this.state.position !== 'up') {
+	containerStatus = 'appear';
+
+	handleTopEnter = () => {
+		if (this.state.position !== 'up') {
 			this.setState({ position: 'top' });
 		}
 	};
 
-	handleTopLeave = ({ direction }) => {
-		if (direction === 'down' && this.state.position !== 'fixed') {
+	handleTopLeave = () => {
+		if (this.containerStatus === 'enter' && this.state.position !== 'fixed') {
 			this.setState({ position: 'fixed' });
 		}
 	};
@@ -48,31 +51,50 @@ export default class StickySection extends Component {
 		}
 	};
 
-	render() {
+	handleContainerEnter = () => {
+		this.containerStatus = 'enter';
+	};
+
+	handleContainerLeave = () => {
+		this.containerStatus = 'leave';
+	};
+
+	renderChildren = ({ ref }) => {
 		const {
 			props: { children, sticky, stickyZIndex, style, ...other },
 			state: { stickyStyle },
 			styles,
 		} = this;
 		return (
+			<div {...other} style={styles.container(style)} ref={ref}>
+				<div style={stickyStyle} />
+				<Hook
+					onEnter={this.handleTopEnter}
+					onLeave={this.handleTopLeave}
+					style={styles.topHook}
+				/>
+				{children}
+				{sticky && (
+					<Sticky style={styles.sticky(stickyZIndex)}>{sticky}</Sticky>
+				)}
+				<Hook
+					onEnter={this.handleBottomEnter}
+					onLeave={this.handleBottomLeave}
+					style={styles.bottomHook(stickyStyle.height)}
+				/>
+			</div>
+		);
+	};
+
+	render() {
+		return (
 			<StickyContext.Provider value={this.state}>
-				<div {...other} style={styles.container(style)}>
-					<div style={stickyStyle} />
-					<Hook
-						onEnter={this.handleTopEnter}
-						onLeave={this.handleTopLeave}
-						style={styles.topHook}
-					/>
-					{children}
-					{sticky && (
-						<Sticky style={styles.sticky(stickyZIndex)}>{sticky}</Sticky>
-					)}
-					<Hook
-						onEnter={this.handleBottomEnter}
-						onLeave={this.handleBottomLeave}
-						style={styles.bottomHook(stickyStyle.height)}
-					/>
-				</div>
+				<ScrollObserver
+					onEnter={this.handleContainerEnter}
+					onLeave={this.handleContainerLeave}
+				>
+					{this.renderChildren}
+				</ScrollObserver>
 			</StickyContext.Provider>
 		);
 	}
