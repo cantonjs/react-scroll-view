@@ -7,15 +7,20 @@ export default class Hook extends Component {
 	static propTypes = {
 		onEnter: PropTypes.func,
 		onLeave: PropTypes.func,
+		onIntersect: PropTypes.func,
 		style: PropTypes.object,
 	};
 
 	styles = createStyles();
 
 	render() {
-		const { props: { onEnter, onLeave, style }, styles } = this;
+		const { props: { onEnter, onLeave, onIntersect, style }, styles } = this;
 		return (
-			<ScrollObserver onEnter={onEnter} onLeave={onLeave}>
+			<ScrollObserver
+				onEnter={onEnter}
+				onLeave={onLeave}
+				onIntersect={onIntersect}
+			>
 				{({ ref }) => (
 					<div
 						role="none"

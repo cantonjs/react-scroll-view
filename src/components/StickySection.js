@@ -4,7 +4,28 @@ import PropTypes from 'prop-types';
 import { StickyContext } from '../Contexts';
 import Hook from './Hook';
 import Sticky from './Sticky';
-import ScrollObserver from './ScrollObserver';
+
+const isEnteredFromBottom = (entry) => {
+	return (
+		entry.isIntersecting &&
+		entry.intersectionRect.top === entry.boundingClientRect.top
+	);
+};
+
+const isEnteredFromTop = (entry) => {
+	return (
+		entry.isIntersecting &&
+		entry.intersectionRect.bottom === entry.boundingClientRect.bottom
+	);
+};
+
+const isLeftFromTop = (entry) => {
+	return !entry.isIntersecting && entry.boundingClientRect.bottom < 0;
+};
+
+const isLeftFromBottom = (entry) => {
+	return !entry.isIntersecting && entry.boundingClientRect.bottom > 0;
+};
 
 export default class StickySection extends Component {
 	static propTypes = {
@@ -25,8 +46,6 @@ export default class StickySection extends Component {
 
 	styles = createStyles();
 
-	containerStatus = 'appear';
-
 	handleTopEnter = () => {
 		if (this.state.position !== 'up') {
 			this.setState({ position: 'top' });
@@ -34,67 +53,76 @@ export default class StickySection extends Component {
 	};
 
 	handleTopLeave = () => {
-		if (this.containerStatus === 'enter' && this.state.position !== 'fixed') {
+		if (this.state.position !== 'fixed') {
 			this.setState({ position: 'fixed' });
 		}
 	};
 
-	handleBottomEnter = ({ direction }) => {
-		if (direction === 'up' && this.state.position !== 'fixed') {
+	handleBottomEnter = ({ entry }) => {
+		if (
+			entry.intersectionRect.top === entry.boundingClientRect.top &&
+			this.state.position !== 'top'
+		) {
+			this.setState({ position: 'top' });
+		}
+		else if (
+			entry.intersectionRect.bottom === entry.boundingClientRect.bottom &&
+			this.state.position !== 'fixed'
+		) {
 			this.setState({ position: 'fixed' });
 		}
 	};
 
-	handleBottomLeave = ({ direction }) => {
-		if (direction === 'down' && this.state.position !== 'down') {
+	handleBottomLeave = ({ entry }) => {
+		console.log('leave', entry);
+
+		if (
+			entry.boundingClientRect.bottom <= 0 &&
+			this.state.position !== 'down'
+		) {
 			this.setState({ position: 'bottom' });
 		}
 	};
 
-	handleContainerEnter = () => {
-		this.containerStatus = 'enter';
+	handleIntersect = ({ entry }) => {
+		if (isEnteredFromTop(entry)) {
+			console.log('entered from top');
+		}
+		else if (isEnteredFromBottom(entry)) {
+			console.log('entered from bottom');
+		}
+		else if (isLeftFromTop(entry)) {
+			console.log('left from top');
+		}
+		else if (isLeftFromBottom(entry)) {
+			console.log('left from bottom');
+		}
 	};
 
-	handleContainerLeave = () => {
-		this.containerStatus = 'leave';
-	};
-
-	renderChildren = ({ ref }) => {
+	render() {
 		const {
 			props: { children, sticky, stickyZIndex, style, ...other },
 			state: { stickyStyle },
 			styles,
 		} = this;
 		return (
-			<div {...other} style={styles.container(style)} ref={ref}>
-				<div style={stickyStyle} />
-				<Hook
-					onEnter={this.handleTopEnter}
-					onLeave={this.handleTopLeave}
-					style={styles.topHook}
-				/>
-				{children}
-				{sticky && (
-					<Sticky style={styles.sticky(stickyZIndex)}>{sticky}</Sticky>
-				)}
-				<Hook
-					onEnter={this.handleBottomEnter}
-					onLeave={this.handleBottomLeave}
-					style={styles.bottomHook(stickyStyle.height)}
-				/>
-			</div>
-		);
-	};
-
-	render() {
-		return (
 			<StickyContext.Provider value={this.state}>
-				<ScrollObserver
-					onEnter={this.handleContainerEnter}
-					onLeave={this.handleContainerLeave}
-				>
-					{this.renderChildren}
-				</ScrollObserver>
+				<div {...other} style={styles.container(style)}>
+					<div style={stickyStyle} />
+					{/* <Hook
+						onEnter={this.handleTopEnter}
+						onLeave={this.handleTopLeave}
+						style={styles.topHook}
+					/> */}
+					{children}
+					{sticky && (
+						<Sticky style={styles.sticky(stickyZIndex)}>{sticky}</Sticky>
+					)}
+					<Hook
+						onIntersect={this.handleIntersect}
+						style={styles.bottomHook(stickyStyle.height)}
+					/>
+				</div>
 			</StickyContext.Provider>
 		);
 	}
