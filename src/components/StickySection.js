@@ -33,6 +33,7 @@ export default class StickySection extends Component {
 		sticky: PropTypes.node,
 		style: PropTypes.object,
 		stickyZIndex: PropTypes.number,
+		debugId: PropTypes.string,
 	};
 
 	state = {
@@ -74,8 +75,6 @@ export default class StickySection extends Component {
 	};
 
 	handleBottomLeave = ({ entry }) => {
-		console.log('leave', entry);
-
 		if (
 			entry.boundingClientRect.bottom <= 0 &&
 			this.state.position !== 'down'
@@ -84,24 +83,24 @@ export default class StickySection extends Component {
 		}
 	};
 
-	handleIntersect = ({ entry }) => {
+	handleIntersect = ({ entry }, { debugId }) => {
 		if (isEnteredFromTop(entry)) {
-			console.log('entered from top');
+			console.log(debugId, 'entered from top');
 		}
 		else if (isEnteredFromBottom(entry)) {
-			console.log('entered from bottom');
+			console.log(debugId, 'entered from bottom');
 		}
 		else if (isLeftFromTop(entry)) {
-			console.log('left from top');
+			console.log(debugId, 'left from top');
 		}
 		else if (isLeftFromBottom(entry)) {
-			console.log('left from bottom');
+			console.log(debugId, 'left from bottom');
 		}
 	};
 
 	render() {
 		const {
-			props: { children, sticky, stickyZIndex, style, ...other },
+			props: { children, sticky, stickyZIndex, style, debugId, ...other },
 			state: { stickyStyle },
 			styles,
 		} = this;
@@ -119,6 +118,7 @@ export default class StickySection extends Component {
 						<Sticky style={styles.sticky(stickyZIndex)}>{sticky}</Sticky>
 					)}
 					<Hook
+						debugId={debugId}
 						onIntersect={this.handleIntersect}
 						style={styles.bottomHook(stickyStyle.height)}
 					/>

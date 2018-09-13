@@ -14,6 +14,7 @@ export default class ScrollObserver extends Component {
 		rootMargin: PropTypes.string,
 		threshold: thresholdType,
 		innerRef: refType,
+		debugId: PropTypes.string,
 	};
 
 	state = {
@@ -29,10 +30,15 @@ export default class ScrollObserver extends Component {
 			onEnter,
 			onLeave,
 			dom,
-			props: { rootMargin, threshold, onIntersect },
+			props: { rootMargin, threshold, onIntersect, debugId },
 		} = this;
 		process.nextTick(() => {
-			const intersection = new Intersection({ onEnter, onLeave, onIntersect });
+			const intersection = new Intersection({
+				onEnter,
+				onLeave,
+				onIntersect,
+				debugId,
+			});
 			if (dom) {
 				const options = { rootMargin, threshold };
 				this.observer.observe(dom, intersection, options);

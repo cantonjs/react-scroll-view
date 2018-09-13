@@ -68,6 +68,7 @@ export default class App extends Component {
 				isRefreshing={isRefreshing}
 			>
 				<StickySection
+					debugId="section-1"
 					sticky={<h1 style={styles.sticky}>React Scroll View</h1>}
 				>
 					<p>
@@ -112,6 +113,7 @@ export default class App extends Component {
 					</p>
 				</StickySection>
 				<StickySection
+					debugId="section-2"
 					sticky={
 						<h1 style={styles.sticky}>
 							Ut mollis hendrerit erat fermentum tristique.
@@ -156,7 +158,10 @@ export default class App extends Component {
 						rutrum orci suscipit. Aenean nec consequat sem, et tempor augue.
 					</p>
 				</StickySection>
-				<StickySection sticky={<h1 style={styles.sticky}>Maecenas nunc.</h1>}>
+				<StickySection
+					debugId="section-3"
+					sticky={<h1 style={styles.sticky}>Maecenas nunc.</h1>}
+				>
 					<p>
 						Donec non facilisis eros. Morbi et felis quis neque aliquam rhoncus.
 						Etiam ut facilisis enim, eu vestibulum eros. Sed aliquam libero nec
@@ -330,6 +335,7 @@ export default class App extends Component {
 							Etiam maximus ultrices purus eget eleifend.
 						</h1>
 					}
+					debugId="section-4"
 				>
 					<p>
 						Vestibulum nec quam rhoncus libero elementum volutpat. Morbi id

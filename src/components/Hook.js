@@ -5,22 +5,15 @@ import ScrollObserver from './ScrollObserver';
 
 export default class Hook extends Component {
 	static propTypes = {
-		onEnter: PropTypes.func,
-		onLeave: PropTypes.func,
-		onIntersect: PropTypes.func,
 		style: PropTypes.object,
 	};
 
 	styles = createStyles();
 
 	render() {
-		const { props: { onEnter, onLeave, onIntersect, style }, styles } = this;
+		const { props: { style, ...other }, styles } = this;
 		return (
-			<ScrollObserver
-				onEnter={onEnter}
-				onLeave={onLeave}
-				onIntersect={onIntersect}
-			>
+			<ScrollObserver {...other}>
 				{({ ref }) => (
 					<div
 						role="none"
