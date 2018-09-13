@@ -99,9 +99,9 @@ export default class ScrollView extends Component {
 		this.refreshControl = refreshControl;
 	};
 
-	handleEndEnter = ({ direction }) => {
+	handleEndEnter = () => {
 		const { onEndReached } = this.props;
-		if (direction === 'down' && onEndReached) onEndReached();
+		if (onEndReached) onEndReached();
 	};
 
 	handleScroll = (ev) => {
