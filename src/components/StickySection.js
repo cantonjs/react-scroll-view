@@ -26,38 +26,34 @@ export default class StickySection extends Component {
 
 	styles = createStyles();
 
-	handleTopEnter = () => {
-		if (this.state.position !== 'top') {
-			this.setState({ position: 'top' });
+	setPosition(position) {
+		if (this.state.position !== position) {
+			this.setState({ position });
 		}
+	}
+
+	handleTopEnter = (entryState) => {
+		this.setPosition(entryState.isTopEdge ? 'fixed' : 'top');
 	};
 
 	handleTopLeave = (entryState) => {
-		if (entryState.isOffsetTop && this.state.position === 'top') {
-			this.setState({ position: 'fixed' });
+		if (entryState.isOffsetTop) {
+			this.setPosition('fixed');
 		}
 	};
 
 	handleIntersect = (entryState) => {
-		if (entryState.isBottomVisible && !entryState.isTopVisible) {
-			if (this.state.position !== 'fixed') {
-				this.setState({ position: 'fixed' });
-			}
+		if (
+			entryState.isTopEdge ||
+			(entryState.isBottomVisible && !entryState.isTopVisible)
+		) {
+			this.setPosition('fixed');
 		}
-		else if (entryState.isTopVisible) {
-			if (this.state.position !== 'top') {
-				this.setState({ position: 'top' });
-			}
+		else if (entryState.isTopVisible || entryState.isOffsetBottom) {
+			this.setPosition('top');
 		}
 		else if (entryState.isOffsetTop) {
-			if (this.state.position !== 'bottom') {
-				this.setState({ position: 'bottom' });
-			}
-		}
-		else if (entryState.isOffsetBottom) {
-			if (this.state.position !== 'top') {
-				this.setState({ position: 'top' });
-			}
+			this.setPosition('bottom');
 		}
 	};
 
