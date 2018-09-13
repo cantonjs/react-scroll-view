@@ -38,11 +38,17 @@ export default class EntryState {
 
 	get isTopEdge() {
 		const { entry } = this;
-		return entry.boundingClientRect.top === entry.rootBounds.top;
+		return (
+			entry.isIntersecting &&
+			entry.boundingClientRect.top === entry.rootBounds.top
+		);
 	}
 
 	get isBottomEdge() {
 		const { entry } = this;
-		return entry.boundingClientRect.bottom === entry.rootBounds.bottom;
+		return (
+			entry.isIntersecting &&
+			entry.boundingClientRect.bottom === entry.rootBounds.bottom
+		);
 	}
 }
