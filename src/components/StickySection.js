@@ -1,36 +1,15 @@
 import createStyles from './StickySection.styles';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { stickyNodeType } from '../PropTypes';
 import { StickyContext } from '../Contexts';
 import Hook from './Hook';
 import Sticky from './Sticky';
 
-const isEnteredFromBottom = (entry) => {
-	return (
-		entry.isIntersecting &&
-		entry.intersectionRect.top === entry.boundingClientRect.top
-	);
-};
-
-const isEnteredFromTop = (entry) => {
-	return (
-		entry.isIntersecting &&
-		entry.intersectionRect.bottom === entry.boundingClientRect.bottom
-	);
-};
-
-const isLeftFromTop = (entry) => {
-	return !entry.isIntersecting && entry.boundingClientRect.bottom < 0;
-};
-
-const isLeftFromBottom = (entry) => {
-	return !entry.isIntersecting && entry.boundingClientRect.bottom > 0;
-};
-
 export default class StickySection extends Component {
 	static propTypes = {
 		children: PropTypes.node,
-		sticky: PropTypes.node,
+		sticky: stickyNodeType,
 		style: PropTypes.object,
 		stickyZIndex: PropTypes.number,
 		debugId: PropTypes.string,
@@ -48,53 +27,37 @@ export default class StickySection extends Component {
 	styles = createStyles();
 
 	handleTopEnter = () => {
-		if (this.state.position !== 'up') {
+		if (this.state.position !== 'top') {
 			this.setState({ position: 'top' });
 		}
 	};
 
-	handleTopLeave = () => {
-		if (this.state.position !== 'fixed') {
+	handleTopLeave = (entryState) => {
+		if (entryState.isOffsetTop && this.state.position === 'top') {
 			this.setState({ position: 'fixed' });
 		}
 	};
 
-	handleBottomEnter = ({ entry }) => {
-		if (
-			entry.intersectionRect.top === entry.boundingClientRect.top &&
-			this.state.position !== 'top'
-		) {
-			this.setState({ position: 'top' });
+	handleIntersect = (entryState) => {
+		if (entryState.isBottomVisible && !entryState.isTopVisible) {
+			if (this.state.position !== 'fixed') {
+				this.setState({ position: 'fixed' });
+			}
 		}
-		else if (
-			entry.intersectionRect.bottom === entry.boundingClientRect.bottom &&
-			this.state.position !== 'fixed'
-		) {
-			this.setState({ position: 'fixed' });
+		else if (entryState.isTopVisible) {
+			if (this.state.position !== 'top') {
+				this.setState({ position: 'top' });
+			}
 		}
-	};
-
-	handleBottomLeave = ({ entry }) => {
-		if (
-			entry.boundingClientRect.bottom <= 0 &&
-			this.state.position !== 'down'
-		) {
-			this.setState({ position: 'bottom' });
+		else if (entryState.isOffsetTop) {
+			if (this.state.position !== 'bottom') {
+				this.setState({ position: 'bottom' });
+			}
 		}
-	};
-
-	handleIntersect = ({ entry }, { debugId }) => {
-		if (isEnteredFromTop(entry)) {
-			console.log(debugId, 'entered from top');
-		}
-		else if (isEnteredFromBottom(entry)) {
-			console.log(debugId, 'entered from bottom');
-		}
-		else if (isLeftFromTop(entry)) {
-			console.log(debugId, 'left from top');
-		}
-		else if (isLeftFromBottom(entry)) {
-			console.log(debugId, 'left from bottom');
+		else if (entryState.isOffsetBottom) {
+			if (this.state.position !== 'top') {
+				this.setState({ position: 'top' });
+			}
 		}
 	};
 
@@ -108,17 +71,18 @@ export default class StickySection extends Component {
 			<StickyContext.Provider value={this.state}>
 				<div {...other} style={styles.container(style)}>
 					<div style={stickyStyle} />
-					{/* <Hook
+					<Hook
+						debugId={`${debugId}(top)`}
 						onEnter={this.handleTopEnter}
 						onLeave={this.handleTopLeave}
 						style={styles.topHook}
-					/> */}
+					/>
 					{children}
 					{sticky && (
 						<Sticky style={styles.sticky(stickyZIndex)}>{sticky}</Sticky>
 					)}
 					<Hook
-						debugId={debugId}
+						debugId={`${debugId}(bottom)`}
 						onIntersect={this.handleIntersect}
 						style={styles.bottomHook(stickyStyle.height)}
 					/>

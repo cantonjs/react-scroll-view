@@ -7,12 +7,12 @@ export default class LazyElement extends Component {
 		children: PropTypes.node,
 	};
 
-	handleEnter = ({ direction }) => {
-		console.log('on enter', direction);
+	handleEnter = () => {
+		console.log('on enter');
 	};
 
-	handleLeave = ({ direction }) => {
-		console.log('on leave', direction);
+	handleLeave = () => {
+		console.log('on leave');
 	};
 
 	render() {

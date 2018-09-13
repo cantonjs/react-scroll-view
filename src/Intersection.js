@@ -1,4 +1,5 @@
 import { noop } from './util';
+import EntryState from './EntryState';
 
 export default class Intersection {
 	constructor({ onEnter, onLeave, onIntersect, debugId = '' }) {
@@ -12,12 +13,11 @@ export default class Intersection {
 	onIntersect(eventData) {
 		const { entry } = eventData;
 		const { isIntersecting } = entry;
-		const { debugId } = this;
-		const eventState = { debugId };
+		const entryState = new EntryState(entry, this.debugId);
 		if (this._isIntersecting !== isIntersecting) {
 			this._isIntersecting = isIntersecting;
-			this[isIntersecting ? 'onEnter' : 'onLeave'](eventData, eventState);
+			this[isIntersecting ? 'onEnter' : 'onLeave'](entryState);
 		}
-		this._onIntersect(eventData, eventState);
+		this._onIntersect(entryState);
 	}
 }

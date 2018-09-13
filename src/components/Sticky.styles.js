@@ -1,7 +1,7 @@
 import { create } from '../Style';
 
 export default create({
-	fixed: {
+	fixed: (style) => ({
 		position: 'absolute',
 		top: 0,
 		// width: 'inherit',
@@ -11,7 +11,8 @@ export default create({
 		paddingRight: 'inherit',
 		marginLeft: 'inherit',
 		marginRight: 'inherit',
-	},
+		...style,
+	}),
 	relative: (style, topOrBottom) => ({
 		position: 'absolute',
 		zIndex: 1,

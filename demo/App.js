@@ -201,7 +201,7 @@ export default class App extends Component {
 					</p>
 
 					<ScrollView style={{ height: 400 }}>
-						<StickySection sticky={<p style={styles.alpha}>A</p>}>
+						<StickySection debugId="A" sticky={<p style={styles.alpha}>A</p>}>
 							<ul>
 								<li>Adelia Pisano</li>
 								<li>Alayna Loredo</li>
@@ -209,12 +209,12 @@ export default class App extends Component {
 								<li>Ashlee Dollar</li>
 							</ul>
 						</StickySection>
-						<StickySection sticky={<p style={styles.alpha}>B</p>}>
+						<StickySection debugId="B" sticky={<p style={styles.alpha}>B</p>}>
 							<ul>
 								<li>Brant Hunsberger</li>
 							</ul>
 						</StickySection>
-						<StickySection sticky={<p style={styles.alpha}>C</p>}>
+						<StickySection debugId="C" sticky={<p style={styles.alpha}>C</p>}>
 							<ul>
 								<li>Carl Wetzler</li>
 								<li>Cherry Greeno</li>
@@ -222,7 +222,7 @@ export default class App extends Component {
 								<li>Cyril Mikula</li>
 							</ul>
 						</StickySection>
-						<StickySection sticky={<p style={styles.alpha}>D</p>}>
+						<StickySection debugId="D" sticky={<p style={styles.alpha}>D</p>}>
 							<ul>
 								<li>Diedre Zell</li>
 								<li>Dino Grindstaff</li>
