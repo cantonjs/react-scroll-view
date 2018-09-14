@@ -1,3 +1,5 @@
+> This project is currently in beta and APIs are subject to change before v1.0 release.
+
 # react-scroll-view [WIP]
 
 [![CircleCI](https://circleci.com/gh/cantonjs/react-scroll-view.svg?style=shield)](https://circleci.com/gh/cantonjs/react-scroll-view)
@@ -146,13 +148,13 @@ export default class App extends Component {
 import { StickySection } from "@cantonjs/react-scroll-view";
 ```
 
-Section component with a sticky.
+Section component with a sticky header.
 
 #### Props
 
-| Property | Description         | Type          |
-| -------- | ------------------- | ------------- |
-| sticky   | Sticky node element | Node/Function |
+| Property | Description                | Type          |
+| -------- | -------------------------- | ------------- |
+| sticky   | Sticky header node element | Node/Function |
 
 The rest of the props are exactly the same as the original [DOM attributes](https://reactjs.org/docs/dom-elements.html#all-supported-html-attributes).
 
