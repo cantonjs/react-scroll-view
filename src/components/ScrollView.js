@@ -106,7 +106,6 @@ export default class ScrollView extends Component {
 
 	handleScroll = (ev) => {
 		const { props: { onScrollStart, onScroll }, isScrolling } = this;
-		this.observer.updateDirection(ev);
 		if (!isScrolling) {
 			this.isScrolling = true;
 			onScrollStart && onScrollStart(ev);

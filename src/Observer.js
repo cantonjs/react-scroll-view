@@ -22,7 +22,6 @@ export default class Observer {
 		this._boxes = new Map();
 		this._prevScrollPos = 0;
 		this._currScrollPos = 0;
-		this.direction = '';
 	}
 
 	mount(root) {
@@ -41,10 +40,9 @@ export default class Observer {
 			const callback = (entries) =>
 				entries.forEach((entry) => {
 					const { target } = entry;
-					const { direction, _boxes } = this;
-					if (_boxes.has(target)) {
-						const { intersection } = _boxes.get(target);
-						intersection.onIntersect({ entry, direction });
+					if (this._boxes.has(target)) {
+						const { intersection } = this._boxes.get(target);
+						intersection.onIntersect({ entry });
 					}
 				});
 			const observer = new IntersectionObserver(callback, {
@@ -65,16 +63,5 @@ export default class Observer {
 			observer.disconnect();
 			this._boxes.delete(target);
 		}
-	}
-
-	get scrollPos() {
-		return this._prevScrollPos;
-	}
-
-	updateDirection(ev) {
-		const { scrollTop } = ev.currentTarget;
-		const { _prevScrollPos } = this;
-		this.direction = scrollTop < _prevScrollPos ? 'up' : 'down';
-		this._prevScrollPos = scrollTop;
 	}
 }
