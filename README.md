@@ -14,6 +14,7 @@ React scroll component using [Intersection Observer API](https://developer.mozil
   - [ScrollView Component](#scrollview-component)
   - [ScrollObserver Component](#scrollobserver-component)
   - [StickySection Component](#stickysection-component)
+  - [RefreshControl Component](#refreshcontrol-component)
 - [License](#license)
 
 ## Features
@@ -21,7 +22,7 @@ React scroll component using [Intersection Observer API](https://developer.mozil
 - Support sticky for cross browsers (including Mobile Safari)
 - Support refresh control
 - Support `onEndReach()`, `onScrollStart()` and `onScrollEnd()` events
-- Easy to observe the intersections between scroll view and children
+- Easy to observe the intersections between ScrollView and children
 
 ## Installation
 
@@ -66,24 +67,21 @@ Scroll view component
 
 #### Props
 
-| Property                  | Description                                                                                                                              | Type     |
-| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| style                     | These styles will be applied to the scroll view container.                                                                               | Object   |
-| className                 | The className will be applied to the scroll view container.                                                                              | string   |
-| contentContainerStyle     | These styles will be applied to the scroll view content container which wraps all of the child views.                                    | Object   |
-| contentContainerClassName | The className will be applied to the scroll view content container which wraps all of the child views.                                   | string   |
-| onScroll                  | Fires at most once per frame during scrolling                                                                                            | Function |
-| onScrollStart             | Called once when the scroll starts                                                                                                       | Function |
-| onScrollEnd               | Called once when the scroll ends                                                                                                         | Function |
-| onEndReached              | Called once when the scroll position gets within `endReachedThreshold` of the rendered content                                           | Function |
-| endReachedThreshold       | How far from the end (in pixels) the bottom to trigger the `onEndReached` callback                                                       | Number   |
-| isHorizontal              | When `true`, the scroll view's children are arranged horizontally in a row instead of vertically in a column. Defaults to `false`        | Boolean  |
-| disabled                  | When `true`, the view cannot be scrolled. Defaults to `false`                                                                            | Boolean  |
-| onRefresh                 | If provided, a refreshControl will be added for "Pull to Refresh" functionality. Make sure to also set the `isRefreshing` prop correctly | Function |
-| isRefreshing              | Set this `true` while waiting for new data from a refresh                                                                                | Boolean  |
-| refreshControlColor       | The refreshControl icon color                                                                                                            | String   |
-| refreshControlStyle       | The refreshControl style                                                                                                                 | Object   |
-| innerRef                  | Use this to access the dom (DIV) ref                                                                                                     | Function |
+| Property                  | Description                                                                                                                       | Type     |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| style                     | These styles will be applied to the ScrollView container                                                                          | Object   |
+| className                 | The className will be applied to the ScrollView container                                                                         | string   |
+| contentContainerStyle     | These styles will be applied to the ScrollView content container which wraps all of the child views                               | Object   |
+| contentContainerClassName | The className will be applied to the ScrollView content container which wraps all of the child views                              | string   |
+| onScroll                  | Fires at most once per frame during scrolling                                                                                     | Function |
+| onScrollStart             | Called once when the scroll starts                                                                                                | Function |
+| onScrollEnd               | Called once when the scroll ends                                                                                                  | Function |
+| onEndReached              | Called once when the scroll position gets within `endReachedThreshold` of the rendered content                                    | Function |
+| endReachedThreshold       | How far from the end (in pixels) the bottom to trigger the `onEndReached` callback                                                | Number   |
+| isHorizontal              | When `true`, the ScrollView's children are arranged horizontally in a row instead of vertically in a column. Defaults to `false`  | Boolean  |
+| disabled                  | When `true`, the view cannot be scrolled. Defaults to `false`                                                                     | Boolean  |
+| refreshControl            | A RefreshControl component, used to provide pull-to-refresh functionality for the ScrollView. Only works for vertical ScrollViews | Element  |
+| innerRef                  | Use this to access the dom (DIV) ref                                                                                              | Function |
 
 The rest of the props are exactly the same as the original [DOM attributes](https://reactjs.org/docs/dom-elements.html#all-supported-html-attributes).
 
@@ -93,7 +91,7 @@ The rest of the props are exactly the same as the original [DOM attributes](http
 import { ScrollObserver } from "@cantonjs/react-scroll-view";
 ```
 
-Wrap any child component and observe it when in scroll view.
+Wrap any child component and observe it when in ScrollView.
 
 #### Props
 
@@ -111,7 +109,7 @@ The `children` prop will receive the following object shape:
 | Property       | Description                                                                             | Type     |
 | -------------- | --------------------------------------------------------------------------------------- | -------- |
 | ref            | Must be passed down to your component's ref in order to obtain a proper node to observe | Function |
-| isIntersecting | Will be `true` if the target element intersects with the scroll view                    | Boolean  |
+| isIntersecting | Will be `true` if the target element intersects with the ScrollView                     | Boolean  |
 
 #### Example
 
@@ -187,6 +185,62 @@ export default class App extends Component {
             <li>Cris Kepley</li>
           </ul>
         </StickySection>
+      </ScrollView>
+    );
+  }
+}
+```
+
+### RefreshControl Component
+
+```jsx
+import { RefreshControl } from "@cantonjs/react-scroll-view";
+```
+
+RefreshControl component
+
+#### Props
+
+| Property     | Description                                             | Type     |
+| ------------ | ------------------------------------------------------- | -------- |
+| onRefresh    | Called when the view starts refreshing                  | Function |
+| isRefreshing | Whether the view should be indicating an active refresh | Boolean  |
+| color        | The refreshControl icon color                           | String   |
+
+The rest of the props are exactly the same as the original [DOM attributes](https://reactjs.org/docs/dom-elements.html#all-supported-html-attributes).
+
+#### Example
+
+```js
+import "intersection-observer";
+import React, { Component } from "react";
+import { ScrollView, RefreshControl } from "@cantonjs/react-scroll-view";
+
+export default class App extends Component {
+  state = {
+    isRefreshing: false,
+  };
+  
+  handleRefresh = () => {
+    this.setState({
+      isRefreshing: true,
+    });
+  };
+
+  render() {
+    const { isRefreshing } = this.state;
+    return (
+      <ScrollView
+        style={{ height: '100vh' }}
+        refreshControl={
+          <RefreshControl
+            onRefresh={this.handleRefresh}
+            isRefreshing={isRefreshing}
+          />
+        }
+      >
+        <h1>React Scroll View</h1>
+        <p>Awseome!</p>
       </ScrollView>
     );
   }
