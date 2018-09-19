@@ -1,7 +1,7 @@
 import 'intersection-observer';
 import React, { Component } from 'react';
 import LazyElement from './LazyElement';
-import { ScrollView, StickySection } from '../src';
+import { ScrollView, StickySection, RefreshControl } from '../src';
 
 const styles = {
 	container: {
@@ -64,8 +64,12 @@ export default class App extends Component {
 				onScrollStart={this.handleScrollStart}
 				onScrollEnd={this.handleScrollEnd}
 				onEndReached={this.handleEndReached}
-				onRefresh={this.handleRefresh}
-				isRefreshing={isRefreshing}
+				refreshControl={
+					<RefreshControl
+						onRefresh={this.handleRefresh}
+						isRefreshing={isRefreshing}
+					/>
+				}
 			>
 				<StickySection
 					debugId="section-1"

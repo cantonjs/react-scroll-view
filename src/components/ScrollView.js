@@ -1,12 +1,11 @@
 import createStyles from './ScrollView.styles';
-import React, { Component } from 'react';
+import React, { Component, cloneElement } from 'react';
 import PropTypes from 'prop-types';
 import { isIOS, forwardRef, debounce, eventOptions } from '../util';
 import { refType } from '../PropTypes';
 import Observer from '../Observer';
 import FixedState from '../FixedState';
 import Hook from './Hook';
-import RefreshControl from './RefreshControl';
 import FixedContainer from './FixedContainer';
 import { ObserverContext, FixedContext } from '../Contexts';
 import warning from 'warning';
@@ -34,28 +33,23 @@ export default class ScrollView extends Component {
 		isHorizontal: PropTypes.bool,
 		innerRef: refType,
 		disabled: PropTypes.bool,
-		onRefresh: PropTypes.func,
-		isRefreshing: PropTypes.bool,
-		refreshControlColor: PropTypes.string,
-		refreshControlStyle: PropTypes.object,
+		refreshControl: PropTypes.node,
 	};
 
 	static defaultProps = {
 		endReachedThreshold: 0,
 		isHorizontal: false,
 		disabled: false,
-		isRefreshing: false,
-		refreshControlColor: '#333',
 	};
 
 	constructor(props) {
 		super(props);
 
-		const { isHorizontal, onEndReached, onRefresh } = props;
+		const { isHorizontal, onEndReached, refreshControl } = props;
 
 		warning(
-			!isHorizontal || !onRefresh,
-			'`onRefresh` with `isHorizontal` is NOT supported, `onRefresh` will be ignored',
+			!isHorizontal || !refreshControl,
+			'`refreshControl` with `isHorizontal` is NOT supported, `refreshControl` will be ignored',
 		);
 
 		warning(
@@ -81,17 +75,6 @@ export default class ScrollView extends Component {
 		this.registerTouchEvents(dom);
 	}
 
-	componentDidUpdate(prevProps) {
-		const { isRefreshing } = this.props;
-		if (prevProps.isRefreshing && !isRefreshing) {
-			const { refreshControl } = this;
-			if (refreshControl) {
-				refreshControl.end();
-				refreshControl.setHeight(0);
-			}
-		}
-	}
-
 	componentWillUnmount() {
 		const { dom } = this;
 		this.toEmitOnScrollEnd.clearDebounce();
@@ -112,8 +95,8 @@ export default class ScrollView extends Component {
 	};
 
 	registerTouchEvents = (dom) => {
-		const { onRefresh } = this.props;
-		if (!onRefresh) {
+		const { refreshControl } = this.props;
+		if (!refreshControl) {
 			return dom.addEventListener(
 				'touchmove',
 				this.handleResumeTouchMove,
@@ -126,8 +109,8 @@ export default class ScrollView extends Component {
 	};
 
 	unregisterTouchEvents = (dom) => {
-		const { onRefresh } = this.props;
-		if (!onRefresh) {
+		const { refreshControl } = this.props;
+		if (!refreshControl) {
 			return dom.removeEventListener(
 				'touchmove',
 				this.handleResumeTouchMove,
@@ -187,20 +170,20 @@ export default class ScrollView extends Component {
 	};
 
 	handleTouchEnd = () => {
-		const { onRefresh, isRefreshing } = this.props;
 		this.y0 = undefined;
-		if (isRefreshing || this.isPullingDown) {
+		if (this.isPullingDown) {
 			const { refreshControl } = this;
-			if (!isRefreshing && refreshControl.shouldRefresh) {
-				onRefresh();
-			}
-			refreshControl.end();
-			if (isRefreshing || refreshControl.shouldRefresh) {
-				refreshControl.show();
-			}
-			else {
-				refreshControl.setHeight(0);
-			}
+			refreshControl.attemptToRefresh();
+			// if (!isRefreshing && refreshControl.shouldRefresh) {
+			// 	onRefresh();
+			// }
+			// refreshControl.end();
+			// if (isRefreshing || refreshControl.shouldRefresh) {
+			// 	refreshControl.show();
+			// }
+			// else {
+			// 	refreshControl.setHeight(0);
+			// }
 			this.revertRefreshState();
 		}
 	};
@@ -227,11 +210,8 @@ export default class ScrollView extends Component {
 				onEndReached,
 				endReachedThreshold,
 				isHorizontal,
-				onRefresh,
 				disabled,
-				isRefreshing,
-				refreshControlColor,
-				refreshControlStyle,
+				refreshControl,
 				innerRef,
 				...other
 			},
@@ -251,14 +231,10 @@ export default class ScrollView extends Component {
 							onScroll={this.handleScroll}
 						>
 							{!isHorizontal &&
-								onRefresh && (
-								<RefreshControl
-									ref={this.refreshControlRef}
-									isRefreshing={isRefreshing}
-									color={refreshControlColor}
-									style={refreshControlStyle}
-								/>
-							)}
+								refreshControl &&
+								cloneElement(refreshControl, {
+									ref: this.refreshControlRef,
+								})}
 							<div
 								style={contentContainerStyle}
 								className={contentContainerClassName}

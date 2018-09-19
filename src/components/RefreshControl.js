@@ -8,13 +8,26 @@ import { PullThreshold } from '../constants';
 export default class RefreshControl extends Component {
 	static propTypes = {
 		isRefreshing: PropTypes.bool.isRequired,
-		color: PropTypes.string.isRequired,
+		onRefresh: PropTypes.func,
+		color: PropTypes.string,
 		style: PropTypes.object,
+	};
+
+	static defaultProps = {
+		color: '#333',
 	};
 
 	styles = createStyles();
 
 	shouldRefresh = false;
+
+	componentDidUpdate(prevProps) {
+		const { isRefreshing } = this.props;
+		if (prevProps.isRefreshing && !isRefreshing) {
+			this.end();
+			this.setHeight(0);
+		}
+	}
 
 	domRef = (dom) => (this.dom = dom);
 
@@ -42,15 +55,31 @@ export default class RefreshControl extends Component {
 	}
 
 	end() {
-		this.shouldRefresh = false;
-		this.dom.style.transition =
-			'height 0.3s ease-out, min-height 0.3s ease-out';
-		this.forceUpdate();
+		if (this.shouldRefresh) {
+			this.shouldRefresh = false;
+			this.dom.style.transition =
+				'height 0.3s ease-out, min-height 0.3s ease-out';
+			this.forceUpdate();
+		}
+	}
+
+	attemptToRefresh() {
+		const { onRefresh, isRefreshing } = this.props;
+		if (onRefresh && !isRefreshing && this.shouldRefresh) {
+			onRefresh();
+		}
+		this.end();
+		if (isRefreshing || this.shouldRefresh) {
+			this.show();
+		}
+		else {
+			this.setHeight(0);
+		}
 	}
 
 	render() {
 		const {
-			props: { color, style, isRefreshing, ...other },
+			props: { color, style, isRefreshing, onRefresh, ...other },
 			shouldRefresh,
 			styles,
 		} = this;
