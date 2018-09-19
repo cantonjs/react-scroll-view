@@ -5,7 +5,6 @@ import { ScrollView, StickySection } from '../src';
 
 const styles = {
 	container: {
-		position: 'absolute',
 		width: '100%',
 		height: '100vh',
 		margin: 0,
@@ -13,6 +12,7 @@ const styles = {
 		right: 0,
 		top: 0,
 		bottom: 0,
+		backgroundColor: 'white',
 	},
 	contentContainer: {
 		padding: 40,

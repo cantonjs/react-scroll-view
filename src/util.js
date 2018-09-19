@@ -46,3 +46,22 @@ export function forwardRef(ref, dom) {
 		typeof ref === 'function' ? ref(dom) : (ref.current = dom);
 	}
 }
+
+export const eventOptions = (function getEventOptions() {
+	let passiveOptionSupported = false;
+	const opts = Object.defineProperty({}, 'passive', {
+		get: () => (passiveOptionSupported = true),
+	});
+	try {
+		window.addEventListener('test', null, opts);
+	}
+	catch (e) {}
+
+	if (passiveOptionSupported) {
+		return {
+			passive: false,
+			capture: false,
+		};
+	}
+	return false;
+})();
