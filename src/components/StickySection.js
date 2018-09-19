@@ -33,7 +33,7 @@ export default class StickySection extends Component {
 	}
 
 	handleTopEnter = (entryState) => {
-		this.setPosition(entryState.isTopEdge ? 'fixed' : 'top');
+		this.setPosition(entryState.isTopBoundary ? 'fixed' : 'top');
 	};
 
 	handleTopLeave = (entryState) => {
@@ -44,7 +44,7 @@ export default class StickySection extends Component {
 
 	handleIntersect = (entryState) => {
 		if (
-			entryState.isTopEdge ||
+			entryState.isTopBoundary ||
 			(entryState.isBottomVisible && !entryState.isTopVisible)
 		) {
 			this.setPosition('fixed');

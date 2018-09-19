@@ -36,7 +36,7 @@ export default class EntryState {
 		);
 	}
 
-	get isTopEdge() {
+	get isTopBoundary() {
 		const { entry } = this;
 		return (
 			entry.isIntersecting &&
@@ -44,7 +44,7 @@ export default class EntryState {
 		);
 	}
 
-	get isBottomEdge() {
+	get isBottomBoundary() {
 		const { entry } = this;
 		return (
 			entry.isIntersecting &&
