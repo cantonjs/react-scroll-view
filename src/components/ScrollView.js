@@ -86,8 +86,8 @@ export default class ScrollView extends Component {
 		this.dom = dom;
 	};
 
-	refreshControlRef = (refreshControl) => {
-		this.refreshControl = refreshControl;
+	refreshControlRef = (ref) => {
+		this.refreshControl = ref.control;
 	};
 
 	contentContainerRef = (contentContainer) => {
