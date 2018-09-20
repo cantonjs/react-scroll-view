@@ -83,10 +83,6 @@ export default class ScrollView extends Component {
 		this.refreshControl = ref.control;
 	};
 
-	contentContainerRef = (contentContainer) => {
-		this.contentContainer = contentContainer;
-	};
-
 	registerTouchEvents = (dom) => {
 		if (!this.props.refreshControl) return;
 		this.pullingDown = new PullingDown(this.dom);
@@ -195,7 +191,6 @@ export default class ScrollView extends Component {
 							<div
 								style={contentContainerStyle}
 								className={contentContainerClassName}
-								ref={this.contentContainerRef}
 							>
 								{children}
 							</div>
