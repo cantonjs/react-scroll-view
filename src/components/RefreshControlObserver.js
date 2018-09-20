@@ -1,7 +1,8 @@
 import createStyles from './RefreshControlObserver.styles';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { PullThreshold } from '../constants';
+// import { PullThreshold } from '../constants';
+import { RefreshContext } from '../Contexts';
 
 export default class RefreshControlObserver extends Component {
 	static propTypes = {
@@ -25,55 +26,78 @@ export default class RefreshControlObserver extends Component {
 		}
 	}
 
-	domRef = (dom) => (this.dom = dom);
+	domRef = (dom) => {
+		this.dom = dom;
+	};
 
-	setHeight(val) {
-		const max = PullThreshold;
-		const height = val > 0 ? (val > max ? max + (val - max) / 2 : val) : 0;
-		const { shouldRefresh } = this;
-		this.dom.style.height = `${height}px`;
-		if (height >= max && !shouldRefresh) {
-			this.shouldRefresh = true;
-			this.forceUpdate();
-		}
-		else if (height < max && shouldRefresh) {
-			this.shouldRefresh = false;
-			this.forceUpdate();
-		}
-	}
+	// setHeight(val) {
+	// 	const max = PullThreshold;
+	// 	const height = val > 0 ? (val > max ? max + (val - max) / 2 : val) : 0;
+	// 	const { shouldRefresh } = this;
+	// 	this.dom.style.height = `${height}px`;
+	// 	if (height >= max && !shouldRefresh) {
+	// 		this.shouldRefresh = true;
+	// 		this.forceUpdate();
+	// 	}
+	// 	else if (height < max && shouldRefresh) {
+	// 		this.shouldRefresh = false;
+	// 		this.forceUpdate();
+	// 	}
+	// }
 
-	show() {
-		this.setHeight(PullThreshold);
-	}
+	// show() {
+	// 	this.setHeight(PullThreshold);
+	// }
 
-	start() {
-		this.dom.style.transition = 'none';
-	}
+	// start() {
+	// 	this.dom.style.transition = 'none';
+	// }
 
-	end() {
-		if (this.shouldRefresh) {
-			this.shouldRefresh = false;
-			this.dom.style.transition =
-				'height 0.3s ease-out, min-height 0.3s ease-out';
-			this.forceUpdate();
-		}
-	}
+	// end() {
+	// 	if (this.shouldRefresh) {
+	// 		this.shouldRefresh = false;
+	// 		this.dom.style.transition =
+	// 			'height 0.3s ease-out, min-height 0.3s ease-out';
+	// 		this.forceUpdate();
+	// 	}
+	// }
 
-	attemptToRefresh() {
-		const { onRefresh, isRefreshing } = this.props;
-		if (onRefresh && !isRefreshing && this.shouldRefresh) {
-			onRefresh();
-		}
-		this.end();
-		if (isRefreshing || this.shouldRefresh) {
-			this.show();
-		}
-		else {
-			this.setHeight(0);
-		}
-	}
+	// attemptToRefresh() {
+	// 	const { onRefresh, isRefreshing } = this.props;
+	// 	if (onRefresh && !isRefreshing && this.shouldRefresh) {
+	// 		onRefresh();
+	// 	}
+	// 	this.end();
+	// 	if (isRefreshing || this.shouldRefresh) {
+	// 		this.show();
+	// 	}
+	// 	else {
+	// 		this.setHeight(0);
+	// 	}
+	// }
 
-	render() {
+	// render() {
+	// 	const {
+	// 		props: { children, style, isRefreshing, onRefresh, ...other },
+	// 		shouldRefresh,
+	// 		styles,
+	// 	} = this;
+
+	// 	return (
+	// 		<div
+	// 			{...other}
+	// 			style={styles.container(style, isRefreshing)}
+	// 			ref={this.domRef}
+	// 		>
+	// 			{children({ isRefreshing, shouldRefresh })}
+	// 		</div>
+	// 	);
+	// }
+
+	renderChildren = (refreshState) => {
+		if (!this.refreshState) refreshState.mount(this);
+		this.refreshState = refreshState;
+
 		const {
 			props: { children, style, isRefreshing, onRefresh, ...other },
 			shouldRefresh,
@@ -88,6 +112,12 @@ export default class RefreshControlObserver extends Component {
 			>
 				{children({ isRefreshing, shouldRefresh })}
 			</div>
+		);
+	};
+
+	render() {
+		return (
+			<RefreshContext.Consumer>{this.renderChildren}</RefreshContext.Consumer>
 		);
 	}
 }

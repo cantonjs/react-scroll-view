@@ -1,15 +1,16 @@
 import createStyles from './ScrollView.styles';
-import React, { Component, cloneElement } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { isIOS, forwardRef, debounce, eventOptions } from '../util';
 import { refType } from '../PropTypes';
 import Observer from '../Observer';
 import FixedState from '../FixedState';
+import RefreshState from '../RefreshState';
 import PullingDown from '../PullingDown';
-import { ObserverContext, FixedContext } from '../Contexts';
 import Hook from './Hook';
 import FixedContainer from './FixedContainer';
 import warning from 'warning';
+import { ObserverContext, FixedContext, RefreshContext } from '../Contexts';
 
 export default class ScrollView extends Component {
 	static propTypes = {
@@ -60,6 +61,8 @@ export default class ScrollView extends Component {
 
 		this.fixedChildren = [];
 		this.fixedState = new FixedState();
+
+		if (props.refreshControl) this.refreshState = new RefreshState();
 	}
 
 	componentDidMount() {
@@ -79,12 +82,8 @@ export default class ScrollView extends Component {
 		this.dom = dom;
 	};
 
-	refreshControlRef = (ref) => {
-		this.refreshControl = ref.control;
-	};
-
 	registerTouchEvents = (dom) => {
-		if (!this.props.refreshControl) return;
+		if (!this.refreshState) return;
 		this.pullingDown = new PullingDown(this.dom);
 		dom.addEventListener('touchstart', this.handleTouchStart, eventOptions);
 		dom.addEventListener('touchmove', this.handleTouchMove, eventOptions);
@@ -92,7 +91,7 @@ export default class ScrollView extends Component {
 	};
 
 	unregisterTouchEvents = (dom) => {
-		if (!this.props.refreshControl) return;
+		if (!this.refreshState) return;
 		dom.removeEventListener('touchstart', this.handleTouchStart, eventOptions);
 		dom.removeEventListener('touchmove', this.handleTouchMove, eventOptions);
 		dom.removeEventListener('touchend', this.handleTouchEnd, eventOptions);
@@ -171,43 +170,42 @@ export default class ScrollView extends Component {
 			styles,
 			observer,
 			fixedState,
+			refreshState,
 		} = this;
 		const direction = isHorizontal ? 'horizontal' : 'vertical';
 		return (
 			<ObserverContext.Provider value={observer}>
 				<FixedContext.Provider value={fixedState}>
-					<div style={styles.container(style)} className={className}>
-						<div
-							{...other}
-							style={styles.main(direction, disabled)}
-							ref={this.scrollViewRef}
-							onScroll={this.handleScroll}
-						>
-							{!isHorizontal &&
-								refreshControl &&
-								cloneElement(refreshControl, {
-									ref: this.refreshControlRef,
-								})}
+					<RefreshContext.Provider value={refreshState}>
+						<div style={styles.container(style)} className={className}>
 							<div
-								style={contentContainerStyle}
-								className={contentContainerClassName}
+								{...other}
+								style={styles.main(direction, disabled)}
+								ref={this.scrollViewRef}
+								onScroll={this.handleScroll}
 							>
-								{children}
+								{!isHorizontal && refreshControl}
+								<div
+									style={contentContainerStyle}
+									className={contentContainerClassName}
+								>
+									{children}
+								</div>
+								{isIOS && <div style={styles.background(direction)} />}
+								{!isHorizontal && (
+									<Hook
+										style={styles.endHook(endReachedThreshold)}
+										onEnter={this.handleEndEnter}
+									/>
+								)}
 							</div>
-							{isIOS && <div style={styles.background(direction)} />}
-							{!isHorizontal && (
-								<Hook
-									style={styles.endHook(endReachedThreshold)}
-									onEnter={this.handleEndEnter}
-								/>
-							)}
+							<FixedContainer
+								style={styles.fixedContainer(contentContainerStyle)}
+							>
+								{fixedState.children}
+							</FixedContainer>
 						</div>
-						<FixedContainer
-							style={styles.fixedContainer(contentContainerStyle)}
-						>
-							{fixedState.children}
-						</FixedContainer>
-					</div>
+					</RefreshContext.Provider>
 				</FixedContext.Provider>
 			</ObserverContext.Provider>
 		);

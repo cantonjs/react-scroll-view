@@ -8,3 +8,5 @@ export const ObserverContext = createReactContext({
 export const StickyContext = createReactContext();
 
 export const FixedContext = createReactContext();
+
+export const RefreshContext = createReactContext();
