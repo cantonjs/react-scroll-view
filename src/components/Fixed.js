@@ -1,11 +1,17 @@
-import React, { Component, Children } from 'react';
+import React, { Component, Children, cloneElement } from 'react';
 import PropTypes from 'prop-types';
 import { FixedContext } from '../Contexts';
+import { createId } from '../util';
 
 export default class Fixed extends Component {
 	static propTypes = {
 		children: PropTypes.node,
 	};
+
+	constructor(props) {
+		super(props);
+		this.fixedId = createId();
+	}
 
 	componentDidMount() {
 		this.renderInContext();
@@ -13,21 +19,20 @@ export default class Fixed extends Component {
 
 	componentDidUpdate({ children }) {
 		if (children !== this.props.children) {
-			this.renderInContext(children);
+			this.renderInContext();
 		}
 	}
 
 	componentWillUnmount() {
-		const { fixedContext, props: { children } } = this;
-		if (fixedContext.unmount) {
-			fixedContext.unmount(children);
-		}
+		this.fixedContext.unmount(this.fixedId);
 	}
 
-	renderInContext(prevChildren) {
-		const { fixedContext, props: { children } } = this;
+	renderInContext() {
+		const { fixedContext, fixedId, props: { children } } = this;
 		if (fixedContext.render) {
-			fixedContext.render(Children.only(children), prevChildren);
+			fixedContext.render(
+				cloneElement(Children.only(children), { key: fixedId }),
+			);
 		}
 	}
 

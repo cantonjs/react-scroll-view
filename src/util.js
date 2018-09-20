@@ -2,7 +2,7 @@ const iOSUserAgentRegExp = /(iphone|ipod|ipad)/i;
 export const isIOS = iOSUserAgentRegExp.test(navigator.userAgent);
 
 export const createId = function createId() {
-	return (createId.id = (createId.id || 0) + 1);
+	return (createId.id = (createId.id || 0) + 1).toString();
 };
 
 export const noop = () => {};
