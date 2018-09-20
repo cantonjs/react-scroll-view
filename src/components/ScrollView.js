@@ -10,13 +10,13 @@ import FixedContainer from './FixedContainer';
 import { ObserverContext, FixedContext } from '../Contexts';
 import warning from 'warning';
 
-window.addEventListener(
-	'touchmove',
-	(ev) => {
-		ev.cancelable !== false && ev.preventDefault();
-	},
-	eventOptions,
-);
+// window.addEventListener(
+// 	'touchmove',
+// 	(ev) => {
+// 		ev.cancelable !== false && ev.preventDefault();
+// 	},
+// 	eventOptions,
+// );
 
 export default class ScrollView extends Component {
 	static propTypes = {
@@ -95,28 +95,14 @@ export default class ScrollView extends Component {
 	};
 
 	registerTouchEvents = (dom) => {
-		const { refreshControl } = this.props;
-		if (!refreshControl) {
-			return dom.addEventListener(
-				'touchmove',
-				this.handleResumeTouchMove,
-				eventOptions,
-			);
-		}
+		if (!this.props.refreshControl) return;
 		dom.addEventListener('touchstart', this.handleTouchStart, eventOptions);
 		dom.addEventListener('touchmove', this.handleTouchMove, eventOptions);
 		dom.addEventListener('touchend', this.handleTouchEnd, eventOptions);
 	};
 
 	unregisterTouchEvents = (dom) => {
-		const { refreshControl } = this.props;
-		if (!refreshControl) {
-			return dom.removeEventListener(
-				'touchmove',
-				this.handleResumeTouchMove,
-				eventOptions,
-			);
-		}
+		if (!this.props.refreshControl) return;
 		dom.removeEventListener('touchstart', this.handleTouchStart, eventOptions);
 		dom.removeEventListener('touchmove', this.handleTouchMove, eventOptions);
 		dom.removeEventListener('touchend', this.handleTouchEnd, eventOptions);
@@ -142,30 +128,25 @@ export default class ScrollView extends Component {
 	};
 
 	handleTouchMove = (ev) => {
-		const dy = ev.touches[0].clientY - this.y0;
+		const touchClient = ev.touches[0];
+		const dy = touchClient.clientY - this.y0;
 		if (!this.isPullingDown) {
 			if (this.dom.scrollTop <= 0) {
 				if (dy > 0) {
-					this.refreshControl.start();
-					this.overflowStyle = this.dom.style.overflowY;
-					this.dom.style.overflowY = 'hidden';
-					this.isPullingDown = true;
+					this.startPullDown();
 				}
 			}
 			else {
-				this.y0 = ev.touches[0].clientY;
+				this.y0 = touchClient.clientY;
 			}
 		}
 		else if (dy <= 0) {
 			this.refreshControl.setHeight(0);
-			this.revertRefreshState();
+			this.stopPullDown();
 		}
 
 		if (this.isPullingDown) {
 			this.refreshControl.setHeight(dy);
-		}
-		else {
-			ev.stopPropagation();
 		}
 	};
 
@@ -174,25 +155,34 @@ export default class ScrollView extends Component {
 		if (this.isPullingDown) {
 			const { refreshControl } = this;
 			refreshControl.attemptToRefresh();
-			// if (!isRefreshing && refreshControl.shouldRefresh) {
-			// 	onRefresh();
-			// }
-			// refreshControl.end();
-			// if (isRefreshing || refreshControl.shouldRefresh) {
-			// 	refreshControl.show();
-			// }
-			// else {
-			// 	refreshControl.setHeight(0);
-			// }
-			this.revertRefreshState();
+			this.stopPullDown();
 		}
 	};
 
-	handleResumeTouchMove = (ev) => {
-		ev.stopPropagation();
+	preventWindowScroll = (ev) => {
+		ev.cancelable !== false && ev.preventDefault();
 	};
 
-	revertRefreshState() {
+	startPullDown() {
+		window.addEventListener(
+			'touchmove',
+			this.preventWindowScroll,
+			eventOptions,
+		);
+
+		this.isPullingDown = true;
+		this.refreshControl.start();
+		this.overflowStyle = this.dom.style.overflowY;
+		this.dom.style.overflowY = 'hidden';
+	}
+
+	stopPullDown() {
+		window.removeEventListener(
+			'touchmove',
+			this.preventWindowScroll,
+			eventOptions,
+		);
+
 		this.isPullingDown = false;
 		this.dom.style.overflowY = this.overflowStyle;
 	}
