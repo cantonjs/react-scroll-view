@@ -20,7 +20,7 @@ export default class RefreshControl extends Component {
 	styles = createStyles();
 
 	render() {
-		const { props: { color, style, ...other }, styles } = this;
+		const { props: { color, ...other }, styles } = this;
 
 		return (
 			<RefreshControlObserver {...other}>
