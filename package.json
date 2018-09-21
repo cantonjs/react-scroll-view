@@ -1,6 +1,6 @@
 {
   "name": "@cantonjs/react-scroll-view",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "react scroll component using intersection observer API",
   "repository": "cantonjs/react-scroll-view",
   "scripts": {
