@@ -19,21 +19,17 @@ export default class RefreshControl extends Component {
 
 	styles = createStyles();
 
-	refreshObserverRef = (ref) => {
-		this.control = ref.control;
-	};
-
 	render() {
 		const { props: { color, style, ...other }, styles } = this;
 
 		return (
-			<RefreshControlObserver {...other} ref={this.refreshObserverRef}>
-				{({ isRefreshing, shouldRefresh }) => (
+			<RefreshControlObserver {...other}>
+				{({ isRefreshing, isActive }) => (
 					<div style={styles.iconContainer}>
 						{isRefreshing ? (
 							<Loading color={color} />
 						) : (
-							<Arrow color={color} style={styles.arrowIcon(shouldRefresh)} />
+							<Arrow color={color} style={styles.arrowIcon(isActive)} />
 						)}
 					</div>
 				)}

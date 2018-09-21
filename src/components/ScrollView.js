@@ -59,7 +59,6 @@ export default class ScrollView extends Component {
 			onScrollEnd && onScrollEnd(ev);
 		}, 100);
 
-		this.fixedChildren = [];
 		this.fixedState = new FixedState();
 
 		if (props.refreshControl) this.refreshState = new RefreshState();
@@ -123,7 +122,7 @@ export default class ScrollView extends Component {
 			if (this.dom.scrollTop <= 0) {
 				if (dy > 0) {
 					this.pullingDown.start();
-					this.refreshControl.start();
+					this.refreshState.call('start');
 				}
 			}
 			else {
@@ -131,20 +130,19 @@ export default class ScrollView extends Component {
 			}
 		}
 		else if (dy <= 0) {
-			this.refreshControl.setHeight(0);
+			this.refreshState.call('setHeight', 0);
 			this.pullingDown.stop();
 		}
 
 		if (this.pullingDown.isActive) {
-			this.refreshControl.setHeight(dy);
+			this.refreshState.call('setHeight', dy);
 		}
 	};
 
 	handleTouchEnd = () => {
-		this.y0 = undefined;
+		this.y0 = 0;
 		if (this.pullingDown.isActive) {
-			const { refreshControl } = this;
-			refreshControl.attemptToRefresh();
+			this.refreshState.call('attemptToRefresh');
 			this.pullingDown.stop();
 		}
 	};

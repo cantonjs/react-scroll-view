@@ -11,8 +11,8 @@ export default create({
 		marginLeft: -50,
 		textAlign: 'center',
 	},
-	arrowIcon: (shouldRefresh) => ({
-		transform: `rotateZ(${shouldRefresh ? 180 : 0}deg)`,
+	arrowIcon: (isActive) => ({
+		transform: `rotateZ(${isActive ? 180 : 0}deg)`,
 		transition: 'transform 0.3s',
 	}),
 });
