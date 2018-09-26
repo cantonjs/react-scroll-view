@@ -81,6 +81,11 @@ export default class ScrollView extends Component {
 		this.dom = dom;
 	};
 
+	scrollTo(val) {
+		const args = this.props.isHorizontal ? [val, 0] : [0, val];
+		this.dom.scrollTo(...args);
+	}
+
 	registerTouchEvents = (dom) => {
 		if (!this.refreshState) return;
 		this.pullingDown = new PullingDown(this.dom);
