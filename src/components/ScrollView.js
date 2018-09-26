@@ -127,7 +127,7 @@ export default class ScrollView extends Component {
 			if (this.dom.scrollTop <= 0) {
 				if (dy > 0) {
 					this.pullingDown.start();
-					this.refreshState.call('start');
+					this.refreshState.call('disableTransition');
 				}
 			}
 			else {

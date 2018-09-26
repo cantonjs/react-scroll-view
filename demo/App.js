@@ -34,6 +34,11 @@ export default class App extends Component {
 		isRefreshing: false,
 	};
 
+	componentDidMount() {
+		setTimeout(() => this.setState({ isRefreshing: true }), 2000);
+		setTimeout(() => this.setState({ isRefreshing: false }), 4000);
+	}
+
 	handleScrollStart = () => {
 		// console.log('scroll start');
 	};

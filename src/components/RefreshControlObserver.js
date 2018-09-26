@@ -19,7 +19,11 @@ export default class RefreshControlObserver extends Component {
 	};
 
 	componentDidUpdate(prevProps) {
-		if (prevProps.isRefreshing && !this.props.isRefreshing) {
+		if (!prevProps.isRefreshing && this.props.isRefreshing) {
+			this.enableTransition();
+			this.setHeight(PullThreshold);
+		}
+		else if (prevProps.isRefreshing && !this.props.isRefreshing) {
 			this.end();
 			this.setHeight(0);
 		}
@@ -47,14 +51,18 @@ export default class RefreshControlObserver extends Component {
 		}
 	}
 
-	start() {
+	enableTransition() {
+		this.dom.style.transition =
+			'height 0.3s ease-out, min-height 0.3s ease-out';
+	}
+
+	disableTransition() {
 		this.dom.style.transition = 'none';
 	}
 
 	end() {
 		if (this.state.isActive) {
-			this.dom.style.transition =
-				'height 0.3s ease-out, min-height 0.3s ease-out';
+			this.enableTransition();
 			this.setState({ isActive: false });
 		}
 	}
