@@ -85,6 +85,13 @@ Scroll view component
 
 The rest of the props are exactly the same as the original [DOM attributes](https://reactjs.org/docs/dom-elements.html#all-supported-html-attributes).
 
+#### Methods
+
+| Method        | Description                          |
+| ------------- | ------------------------------------ |
+| scrollTo(val) | Scrolls to a given value immediately |
+
+
 ### ScrollObserver Component
 
 ```jsx
@@ -208,6 +215,12 @@ RefreshControl component
 | color        | The refreshControl icon color                           | String   |
 
 The rest of the props are exactly the same as the original [DOM attributes](https://reactjs.org/docs/dom-elements.html#all-supported-html-attributes).
+
+#### Methods
+
+| Method           | Description                   |
+| ---------------- | ----------------------------- |
+| requestRefresh() | Request to call `onRefresh()` |
 
 #### Example
 
