@@ -81,7 +81,7 @@ export default class ScrollView extends Component {
 		this.dom = dom;
 	};
 
-	scrollTo(val) {
+	scrollTo(val = 0) {
 		const args = this.props.isHorizontal ? [val, 0] : [0, val];
 		this.dom.scrollTo(...args);
 	}
