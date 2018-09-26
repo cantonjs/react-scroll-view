@@ -37,6 +37,11 @@ export default class RefreshControlObserver extends Component {
 		this.dom = dom;
 	};
 
+	requestRefresh() {
+		const { onRefresh } = this.props;
+		onRefresh && onRefresh();
+	}
+
 	setHeight(val) {
 		const max = PullThreshold;
 		const height = val > 0 ? (val > max ? max + (val - max) / 2 : val) : 0;

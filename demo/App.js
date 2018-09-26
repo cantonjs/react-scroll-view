@@ -35,8 +35,7 @@ export default class App extends Component {
 	};
 
 	componentDidMount() {
-		setTimeout(() => this.setState({ isRefreshing: true }), 2000);
-		setTimeout(() => this.setState({ isRefreshing: false }), 4000);
+		setTimeout(() => this.refreshControl.requestRefresh(), 2000);
 	}
 
 	handleScrollStart = () => {
@@ -73,6 +72,7 @@ export default class App extends Component {
 					<RefreshControl
 						onRefresh={this.handleRefresh}
 						isRefreshing={isRefreshing}
+						ref={(ref) => (this.refreshControl = ref)}
 					/>
 				}
 			>
