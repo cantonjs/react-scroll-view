@@ -9,7 +9,8 @@ export default class FixedContainer extends Component {
 	renderChildren = (fixedState) => {
 		this.fixedState = fixedState;
 		this.unbind = fixedState.bind(this);
-		return <div {...this.props}>{fixedState.children}</div>;
+		const { children } = fixedState;
+		return children.length ? <div {...this.props}>{children}</div> : null;
 	};
 
 	render() {
