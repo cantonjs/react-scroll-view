@@ -90,15 +90,11 @@ export default class ScrollView extends Component {
 		if (!this.refreshState) return;
 		this.pullingDown = new PullingDown(this.dom);
 		dom.addEventListener('touchstart', this.handleTouchStart, eventOptions);
-		dom.addEventListener('touchmove', this.handleTouchMove, eventOptions);
-		dom.addEventListener('touchend', this.handleTouchEnd, eventOptions);
 	};
 
 	unregisterTouchEvents = (dom) => {
 		if (!this.refreshState) return;
 		dom.removeEventListener('touchstart', this.handleTouchStart, eventOptions);
-		dom.removeEventListener('touchmove', this.handleTouchMove, eventOptions);
-		dom.removeEventListener('touchend', this.handleTouchEnd, eventOptions);
 	};
 
 	handleEndEnter = () => {
@@ -117,7 +113,10 @@ export default class ScrollView extends Component {
 	};
 
 	handleTouchStart = (ev) => {
+		const { dom } = this;
 		this.y0 = ev.touches[0].clientY;
+		dom.addEventListener('touchmove', this.handleTouchMove, eventOptions);
+		dom.addEventListener('touchend', this.handleTouchEnd, eventOptions);
 	};
 
 	handleTouchMove = (ev) => {
@@ -145,11 +144,15 @@ export default class ScrollView extends Component {
 	};
 
 	handleTouchEnd = () => {
+		const { dom } = this;
 		this.y0 = 0;
 		if (this.pullingDown.isActive) {
 			this.refreshState.call('attemptToRefresh');
 			this.pullingDown.stop();
 		}
+
+		dom.removeEventListener('touchmove', this.handleTouchMove, eventOptions);
+		dom.removeEventListener('touchend', this.handleTouchEnd, eventOptions);
 	};
 
 	render() {
